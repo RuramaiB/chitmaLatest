@@ -60,9 +60,10 @@
             }).then((response) =>{
             const data = response.data;
   
-            if(response.data == "User Not Found"){
-              this.errors.ERR = "Wrong Login details...";
-            }else{
+            // if(response.data == "User Not Found"){
+            //   this.errors.ERR = "Wrong Login details...";
+            //   alert("Wrong login details.")
+            // }else{
               
           
                 this.token = data.token
@@ -94,12 +95,27 @@
                   alert("Welcome to Super Admin Dashboard.")
                   this.$router.push('/superAdmin/')
               }
+              else if(this.role === "User"){
+                  alert("Please use the mobile application to access the system.")
+              }
               else {
                 alert("Login failed")
               }
-            }
+            // }
           }).catch(error => {
           console.log(error)
+          if(error.response.data.status == 404){
+            alert("Account not found.")
+          }
+          else if(error.response.data.status == 401 || error.response.data.status == 403){
+            alert("Wrong login details.")
+          }
+          else if(error.response.data.status == 500){
+            alert("Fatal error. If this persists, please contact the system administrator.")
+          }
+          else{
+            alert("Login failed.")
+          }
           this.errored = true
           this.errors.ERR=error
           

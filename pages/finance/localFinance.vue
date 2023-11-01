@@ -8,12 +8,12 @@
           <!-- Right content -->
           <div class="relative my-1 z-10">
           <button
+          v-if="!loading"
             @click="isOpen = !isOpen"
             class="inline-flex items-center justify-center  font-bold text-md  text-white border-none"
             aria-expanded="false"
           >
-            <!-- {{ account.username }} -->
-            Ruramai
+            {{ this.person }}
             <svg
               class="-mr-1 ml-2 h-5 w-5"
               xmlns="http://www.w3.org/2000/svg"
@@ -100,8 +100,8 @@
                               id="paymentMethod" v-model="payments.paymentMethod" >
                               <option value="" disabled>Select payment method</option>
                               <option value="cash">Cash</option>
-                              <option value="ecocash">Ecocash</option>
-                              <option value="ecocash">OneMoney</option>
+                              <!-- <option value="ecocash">Ecocash</option>
+                              <option value="ecocash">OneMoney</option> -->
                             </select>
                             <p v-if="this.errors.paymentMethod" class="text-sm text-red-600 text-left mb-2">*{{this.errors.paymentMethod}}</p>
                           </div>      
@@ -233,8 +233,8 @@
                         id="paymentMethod"  v-model="finance.paymentMethod">
                         <!-- <option value="" disabled>Select payment method</option> -->
                         <option value="Cash">Cash</option>
-                        <option value="Ecocash">Ecocash</option>
-                        <option value="OneMoney">OneMoney</option>
+                        <!-- <option value="Ecocash">Ecocash</option>
+                        <option value="OneMoney">OneMoney</option> -->
                       </select>
                     </div>      
                  <!-- Phone Number -->
@@ -292,6 +292,7 @@ export default {
       editModalHeading: 'Edit record',
       addModalHeading: 'Add new local finance record',
       loading:true,
+      person: '',
       FID: '',
       item: [{
         financeID: '',
@@ -544,6 +545,28 @@ export default {
 
     }).finally(() => this.loading = false);
     },
+    async getAdminInfo(){
+      this.loading = true;
+      const mN = localStorage.getItem('mN');
+      const mbnD = decryptData(mN);
+      console.log("Munhu uyu",mbnD)
+      const URL = `https://chitma.hushsoft.co.zw/api/api/v1/auth/getUserByMembershipNumber/${mbnD}`;
+      await axios.get(URL,{
+        headers: {'Content-Type': 'application/json',
+            // Authorization : 'Bearer ' + token,
+            'Access-Control-Allow-Origin': '*'}
+      }).then((res) =>
+       {
+        this.adminInfo = res.data
+        this.user = this.adminInfo
+        this.person = this.user.firstname
+      }) .catch(error => {
+        console.log(error.code)
+        this.error=error.code;
+        this.errored = true
+  
+      }).finally(() => this.loading = false);
+      },
       openAddModal() {
         this.addModal = true;
       },
@@ -568,6 +591,7 @@ export default {
   mounted(){
     this.fetchLocalFinance(0),
     this.getAllFinanceDescriptions()
+    this.getAdminInfo()
   }
 };
 </script>

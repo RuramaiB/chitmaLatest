@@ -5,11 +5,12 @@
           <div class=" my-1 z-10 md:mr-8 lg:mr-2">
           <button
             @click="isOpen = !isOpen"
+            v-if="!loading"
             class="inline-flex items-center justify-center  font-bold text-md  text-white border-none"
             aria-expanded="false"
           >
-            <!-- {{ Ruramai }} -->
-            Ruramai
+            {{ this.person}}
+          
             <svg
               class="-mr-1 ml-2 h-5 w-5"
               xmlns="http://www.w3.org/2000/svg"
@@ -109,7 +110,7 @@
                             </tr>
                         </tbody>
           </table>
-          <div class="text-md text-white flex flex-row justify-end bg-blue-900 px-8 lg:w-full md:w-screen">
+          <div v-if="!loading" class="text-md text-white flex flex-row justify-end bg-blue-900 px-8 lg:w-full md:w-screen">
             <button class="p-3" @click="getAllUsers(pageNumber)"  v-for="pageNumber in this.result.totalPages" :key="pageNumber">
               {{ pageNumber }} 
             </button>
@@ -260,6 +261,28 @@
   
       }).finally(() => this.loading = false);
       },  
+      async getAdminInfo(){
+      this.loading = true;
+      const mN = localStorage.getItem('mN');
+      const mbnD = decryptData(mN);
+      console.log("Munhu uyu",mbnD)
+      const URL = `https://chitma.hushsoft.co.zw/api/api/v1/auth/getUserByMembershipNumber/${mbnD}`;
+      await axios.get(URL,{
+        headers: {'Content-Type': 'application/json',
+            // Authorization : 'Bearer ' + token,
+            'Access-Control-Allow-Origin': '*'}
+      }).then((res) =>
+       {
+        this.adminInfo = res.data
+        this.user = this.adminInfo
+        this.person = this.user.firstname
+      }) .catch(error => {
+        console.log(error.code)
+        this.error=error.code;
+        this.errored = true
+  
+      }).finally(() => this.loading = false);
+      },
         openAddModal() {
           this.addModal = true;
         },
@@ -313,7 +336,8 @@
        
     },
     mounted(){
-      this.getAllUsers(1)
+      this.getAllUsers(1),
+      this.getAdminInfo()
     }
   };
   </script>

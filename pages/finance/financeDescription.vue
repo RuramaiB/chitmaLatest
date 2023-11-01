@@ -249,6 +249,7 @@
         this.closeDeleteModal();
       } 
       },
+   
         openAddModal() {
           this.addModal = true;
         },

@@ -9,11 +9,11 @@
           <div class="relative my-1 z-10">
           <button
             @click="isOpen = !isOpen"
+            v-if="!loading"
             class="inline-flex items-center justify-center  font-bold text-md  text-white border-none"
             aria-expanded="false"
           >
-            <!-- {{ Ruramai }} -->
-            Ruramai
+            {{ this.person }}
             <svg
               class="-mr-1 ml-2 h-5 w-5"
               xmlns="http://www.w3.org/2000/svg"
@@ -363,6 +363,7 @@
   
   <script>
   import axios from 'axios'
+  import { encryptData, decryptData } from '@/encryption';
   export default {
     data() {
       return {
@@ -375,6 +376,7 @@
         addModalHeading: 'Add new user',
         loading:true,
         isOpen: false,
+        person: '',
         name: '',
         item: [{
           id: '',
@@ -643,7 +645,28 @@
         this.closeDeleteModal();
       } 
       },
-
+      async getAdminInfo(){
+      this.loading = true;
+      const mN = localStorage.getItem('mN');
+      const mbnD = decryptData(mN);
+      console.log("Munhu uyu",mbnD)
+      const URL = `https://chitma.hushsoft.co.zw/api/api/v1/auth/getUserByMembershipNumber/${mbnD}`;
+      await axios.get(URL,{
+        headers: {'Content-Type': 'application/json',
+            // Authorization : 'Bearer ' + token,
+            'Access-Control-Allow-Origin': '*'}
+      }).then((res) =>
+       {
+        this.adminInfo = res.data
+        this.user = this.adminInfo
+        this.person = this.user.firstname
+      }) .catch(error => {
+        console.log(error.code)
+        this.error=error.code;
+        this.errored = true
+  
+      }).finally(() => this.loading = false);
+      },
         openAddModal() {
           this.addModal = true;
         },
@@ -698,6 +721,7 @@
     },
     mounted(){
       this.getAllUsers(1)
+      this.getAdminInfo()
     }
   };
   </script>
