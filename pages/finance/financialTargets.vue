@@ -214,7 +214,7 @@
       pageNumber -=1;
       const pp = localStorage.getItem('pp');
       const local = decryptData(pp);
-      const URL = `https://chitma.hushsoft.co.zw/financialTargets/getAllFinancialTargetsByLocal/${local}/${pageNumber}`;
+      const URL = `https://chitma.hushsoft.co.zw/api/financialTargets/getAllFinancialTargetsByLocal/${local}/${pageNumber}`;
       await axios.get(URL,{
         headers: {'Content-Type': 'application/json',
             // Authorization : 'Bearer ' + token,
@@ -248,7 +248,7 @@
           try{
             const pp = localStorage.getItem('pp');
       const local = decryptData(pp);
-          await axios.post('https://chitma.hushsoft.co.zw/financeDescription/addNewFinanceDescriptions',{
+          await axios.post('https://chitma.hushsoft.co.zw/api/financeDescription/addNewFinanceDescriptions',{
             'description': this.targets.description,  
             'status': this.targets.status,
             'local': local,
@@ -272,7 +272,7 @@
      async handleOption (_option) {
         if(_option = 'yes'){
           try{
-          await axios.delete('https://chitma.hushsoft.co.zw/local/deleteLocalPreachingPointByName/' + this.name,{
+          await axios.delete('https://chitma.hushsoft.co.zw/api/local/deleteLocalPreachingPointByName/' + this.name,{
               headers: {'Content-Type': 'application/json'},
               credentials: 'include'
             }).then((response) =>{

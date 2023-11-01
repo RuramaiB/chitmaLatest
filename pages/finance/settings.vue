@@ -123,7 +123,7 @@ import { encryptData, decryptData } from '@/encryption';
       this.loading = true;
       const id = localStorage.getItem('mN');
       const mNumber = decryptData(id);
-      const URL = `https://chitma.hushsoft.co.zw/api/v1/auth/getUserByMembershipNumber/${mNumber}`;
+      const URL = `https://chitma.hushsoft.co.zw/api/api/v1/auth/getUserByMembershipNumber/${mNumber}`;
       await axios.get(URL,{
         headers: {'Content-Type': 'application/json',
             // Authorization : 'Bearer ' + token,
@@ -151,7 +151,7 @@ import { encryptData, decryptData } from '@/encryption';
       const mNumber = decryptData(id);
           const pp = localStorage.getItem('pp');
           const local = decryptData(pp);
-        await axios.put('https://chitma.hushsoft.co.zw/api/v1/auth/updateAdminByMembershipNumber/' + mNumber,{
+        await axios.put('https://chitma.hushsoft.co.zw/api/api/v1/auth/updateAdminByMembershipNumber/' + mNumber,{
           'firstname': this.user.firstname,  
           'lastname': this.user.lastname,  
           'gender': this.user.gender,  

@@ -150,7 +150,7 @@
       async getLocalByName(name){
             this.loading = true;
             const locName = name.replace('%20', '@');
-      const URL = `https://chitma.hushsoft.co.zw/local/getLocalPreachingPointByName/?preachingPoint=${locName}`;
+      const URL = `https://chitma.hushsoft.co.zw/api/local/getLocalPreachingPointByName/?preachingPoint=${locName}`;
       // const token = localStorage.token;
       await axios.get(URL,{
         headers: {'Content-Type': 'application/json',
@@ -173,7 +173,7 @@
       this.loading = true;
       const pp = localStorage.getItem('pp');
       const local = decryptData(pp);
-      const URL = `https://chitma.hushsoft.co.zw/financeDescription/getAllFinanceDescriptions/${local}`;
+      const URL = `https://chitma.hushsoft.co.zw/api/financeDescription/getAllFinanceDescriptions/${local}`;
       await axios.get(URL,{
         headers: {'Content-Type': 'application/json',
             // Authorization : 'Bearer ' + token,
@@ -203,7 +203,7 @@
           try{
             const pp = localStorage.getItem('pp');
       const local = decryptData(pp);
-          await axios.post('https://chitma.hushsoft.co.zw/financeDescription/addNewFinanceDescriptions',{
+          await axios.post('https://chitma.hushsoft.co.zw/api/financeDescription/addNewFinanceDescriptions',{
             'description': this.loc.description,  
             'status': this.loc.status,
             'local': local,
@@ -227,7 +227,7 @@
      async handleOption (_option) {
         if(_option == 'yes'){
           try{
-          await axios.delete('https://chitma.hushsoft.co.zw/local/deleteLocalPreachingPointByName/' + this.name,{
+          await axios.delete('https://chitma.hushsoft.co.zw/api/local/deleteLocalPreachingPointByName/' + this.name,{
               headers: {'Content-Type': 'application/json'},
               credentials: 'include'
             }).then((response) =>{

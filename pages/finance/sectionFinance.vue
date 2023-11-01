@@ -381,7 +381,7 @@ export default {
     pageNumber -=1;
     const pp = localStorage.getItem('pp');
       const local = decryptData(pp);
-    const URL = `https://chitma.hushsoft.co.zw/sectionFinance/getSectionFinanceByLocal/${local}/${pageNumber}`;
+    const URL = `https://chitma.hushsoft.co.zw/api/sectionFinance/getSectionFinanceByLocal/${local}/${pageNumber}`;
     const token = localStorage.token;
     await axios.get(URL,{
       headers: {'Content-Type': 'application/json',
@@ -402,7 +402,7 @@ export default {
     },
     async fetchSectionFinanceByID(id){
           this.loading = true;
-    const URL = `https://chitma.hushsoft.co.zw/sectionFinance/getSectionFinanceByFinanceID/${id}`;
+    const URL = `https://chitma.hushsoft.co.zw/api/sectionFinance/getSectionFinanceByFinanceID/${id}`;
     // const token = localStorage.token;
     await axios.get(URL,{
       headers: {'Content-Type': 'application/json',
@@ -449,7 +449,7 @@ export default {
         try{
           const pp = localStorage.getItem('pp');
       const local = decryptData(pp);
-        await axios.post('https://chitma.hushsoft.co.zw/sectionFinance/addSectionFinance',{
+        await axios.post('https://chitma.hushsoft.co.zw/api/sectionFinance/addSectionFinance',{
           'amount': this.payments.amount,  
           'phoneNumber': this.payments.phoneNumber,
           'paymentMethod': this.payments.paymentMethod,
@@ -478,7 +478,7 @@ export default {
     async handleOption(_option) {
       if(_option = 'yes'){
         try{
-        await axios.delete('https://chitma.hushsoft.co.zw/sectionFinance/deleteSectionFinanceByFinanceID/' + this.FID,{
+        await axios.delete('https://chitma.hushsoft.co.zw/api/sectionFinance/deleteSectionFinanceByFinanceID/' + this.FID,{
             headers: {'Content-Type': 'application/json'},
             credentials: 'include'
           }).then((response) =>{
@@ -529,7 +529,7 @@ export default {
         try{
           const pp = localStorage.getItem('pp');
       const local = decryptData(pp);
-        await axios.put(`https://chitma.hushsoft.co.zw/sectionFinance/updateSectionFinanceByFinanceID/${id}`,{
+        await axios.put(`https://chitma.hushsoft.co.zw/api/sectionFinance/updateSectionFinanceByFinanceID/${id}`,{
           'amount': this.finance.amount,  
           'phoneNumber': this.finance.phoneNumber,
           'paymentMethod': this.finance.paymentMethod,
@@ -559,7 +559,7 @@ export default {
     this.loading = true;
     const pp = localStorage.getItem('pp');
       const local = decryptData(pp);
-    const URL = `https://chitma.hushsoft.co.zw/financeDescription/getAllFinanceDescriptions/${local}`;
+    const URL = `https://chitma.hushsoft.co.zw/api/financeDescription/getAllFinanceDescriptions/${local}`;
     const token = localStorage.token;
     await axios.get(URL,{
       headers: {'Content-Type': 'application/json',

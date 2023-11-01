@@ -240,7 +240,7 @@
       async getLocalByName(name){
             this.loading = true;
             const locName = name.replace('%20', '@');
-      const URL = `https://chitma.hushsoft.co.zw/local/getLocalPreachingPointByName/?preachingPoint=${locName}`;
+      const URL = `https://chitma.hushsoft.co.zw/api/local/getLocalPreachingPointByName/?preachingPoint=${locName}`;
       // const token = localStorage.token;
       await axios.get(URL,{
         headers: {'Content-Type': 'application/json',
@@ -261,7 +261,7 @@
       },
       async getLocals(){
       this.loading = true;
-      const URL = "https://chitma.hushsoft.co.zw/local/getAllLocalPreachingPoints";
+      const URL = "https://chitma.hushsoft.co.zw/api/local/getAllLocalPreachingPoints";
       await axios.get(URL,{
         headers: {'Content-Type': 'application/json',
             // Authorization : 'Bearer ' + token,
@@ -285,7 +285,7 @@
               if (Object.keys(this.errors).length === 0) {
           // make API call or submit form data here
           try{
-          await axios.post('https://chitma.hushsoft.co.zw/local',{
+          await axios.post('https://chitma.hushsoft.co.zw/api/local',{
             'localLocation': this.loc.location,  
             'localName': this.loc.local,
           },{
@@ -318,7 +318,7 @@
               if (Object.keys(this.errors).length === 0) {
           // make API call or submit form data here
           try{
-          await axios.put('https://chitma.hushsoft.co.zw/local/updateLocalByName/' + locNames,{
+          await axios.put('https://chitma.hushsoft.co.zw/api/local/updateLocalByName/' + locNames,{
             location: this.locs.location,  
             name: this.locs.name,
           },{
@@ -341,7 +341,7 @@
      async handleOption (_option) {
         if(_option = 'yes'){
           try{
-          await axios.delete('https://chitma.hushsoft.co.zw/local/deleteLocalPreachingPointByName/' + this.name,{
+          await axios.delete('https://chitma.hushsoft.co.zw/api/local/deleteLocalPreachingPointByName/' + this.name,{
               headers: {'Content-Type': 'application/json'},
               credentials: 'include'
             }).then((response) =>{

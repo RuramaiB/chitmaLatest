@@ -42,7 +42,7 @@
            try{
             const membershipNumber = this.membershipNumber;
             const otp = this.otp
-           await axios.post(`https://chitma.hushsoft.co.zw/otp/validateOTP/${membershipNumber}/${otp}`,{
+           await axios.post(`https://chitma.hushsoft.co.zw/api/otp/validateOTP/${membershipNumber}/${otp}`,{
            },{
                headers: {'Content-Type': 'application/json'},
                credentials: 'include'

@@ -46,7 +46,7 @@
               if (Object.keys(this.errors).length === 0) {
          // Your code for handling the login form submission
          try{
-          await axios.post('https://chitma.hushsoft.co.zw/api/v1/auth/login',{
+          await axios.post('https://chitma.hushsoft.co.zw/api/api/v1/auth/login',{
           membershipNumber:this.membershipNumber,
           password :this.password
           },{
@@ -115,7 +115,7 @@
           },
           async getAdminInfo(userID){
       this.loading = true;
-      const URL = `https://chitma.hushsoft.co.zw/api/v1/auth/getUserByMembershipNumber/${userID}`;
+      const URL = `https://chitma.hushsoft.co.zw/api/api/v1/auth/getUserByMembershipNumber/${userID}`;
       await axios.get(URL,{
         headers: {'Content-Type': 'application/json',
             // Authorization : 'Bearer ' + token,

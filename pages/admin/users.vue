@@ -442,7 +442,7 @@ export default {
   methods:{
     async getUserByMembershipNumber(membershipNumber){
           this.loading = true;
-    const URL = `https://chitma.hushsoft.co.zw/api/v1/auth/getUserByMembershipNumber/${membershipNumber}`;
+    const URL = `https://chitma.hushsoft.co.zw/api/api/v1/auth/getUserByMembershipNumber/${membershipNumber}`;
     // const token = localStorage.token;
     await axios.get(URL,{
       headers: {'Content-Type': 'application/json',
@@ -502,7 +502,7 @@ export default {
         try{
           const pp = localStorage.getItem('pp');
           const local = decryptData(pp);
-        await axios.post('https://chitma.hushsoft.co.zw/api/v1/auth/register',{
+        await axios.post('https://chitma.hushsoft.co.zw/api/api/v1/auth/register',{
           'firstname': this.users.firstname,  
           'lastname': this.users.lastname,  
           'gender': this.users.gender,  
@@ -536,8 +536,8 @@ export default {
     pageNumber -=1;
     const pp = localStorage.getItem('pp');
       const local = decryptData(pp);
-    const URL = `https://chitma.hushsoft.co.zw/api/v1/auth/getAllUsersAccounts/${pageNumber}/${local}`;
-    // const URL = "https://chitma.hushsoft.co.zw/api/v1/auth/getAllNonAdminAccounts/${pageNumber}/${local}";
+    const URL = `https://chitma.hushsoft.co.zw/api/api/v1/auth/getAllUsersAccounts/${pageNumber}/${local}`;
+    // const URL = "https://chitma.hushsoft.co.zw/api/api/v1/auth/getAllNonAdminAccounts/${pageNumber}/${local}";
     const token = localStorage.token;
     await axios.get(URL,{
       headers: {'Content-Type': 'application/json',
@@ -589,7 +589,7 @@ export default {
         try{
           const pp = localStorage.getItem('pp');
           const local = decryptData(pp);
-        await axios.put('https://chitma.hushsoft.co.zw/api/v1/auth/updateUserByMembershipNumber/' + membershipNumber,{
+        await axios.put('https://chitma.hushsoft.co.zw/api/api/v1/auth/updateUserByMembershipNumber/' + membershipNumber,{
           'firstname': this.account.firstname,  
           'lastname': this.account.lastname,  
           'gender': this.account.gender,  
@@ -619,7 +619,7 @@ export default {
    async handleOption (_option) {
       if(_option = 'yes'){
         try{
-        await axios.delete('https://chitma.hushsoft.co.zw/api/v1/auth/deleteUserByMembershipNumber/' + this.membershipNumber,{
+        await axios.delete('https://chitma.hushsoft.co.zw/api/api/v1/auth/deleteUserByMembershipNumber/' + this.membershipNumber,{
             headers: {'Content-Type': 'application/json'},
             credentials: 'include'
           }).then((response) =>{
@@ -645,7 +645,7 @@ export default {
     this.loading = true;
     const pp = localStorage.getItem('pp');
       const local = decryptData(pp);
-    const URL = `https://chitma.hushsoft.co.zw/sections/getAllSection/${local}`;
+    const URL = `https://chitma.hushsoft.co.zw/api/sections/getAllSection/${local}`;
     const token = localStorage.token;
     await axios.get(URL,{
       headers: {'Content-Type': 'application/json',

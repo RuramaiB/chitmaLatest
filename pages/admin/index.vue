@@ -300,7 +300,7 @@ export default {
     pageNumber -=1;
     const pp = localStorage.getItem('pp');
       const local = decryptData(pp);
-    const URL = `https://chitma.hushsoft.co.zw/api/v1/auth/getAllUsersAccounts/${pageNumber}/${local}`;
+    const URL = `https://chitma.hushsoft.co.zw/api/api/v1/auth/getAllUsersAccounts/${pageNumber}/${local}`;
     const token = localStorage.token;
     await axios.get(URL,{
       headers: {'Content-Type': 'application/json',

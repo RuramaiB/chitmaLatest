@@ -397,7 +397,7 @@ export default {
     pageNumber -=1;
     const pp = localStorage.getItem('pp');
       const local = decryptData(pp);
-    const URL = `https://chitma.hushsoft.co.zw/organisationsFinance/getAllOrganisationsByLocal/${local}/${pageNumber}`;
+    const URL = `https://chitma.hushsoft.co.zw/api/organisationsFinance/getAllOrganisationsByLocal/${local}/${pageNumber}`;
     await axios.get(URL,{
       headers: {'Content-Type': 'application/json',
           // Authorization : 'Bearer ' + token,
@@ -417,7 +417,7 @@ export default {
   },
   async fetchOrgFinanceByID(id){
           this.loading = true;
-    const URL = `https://chitma.hushsoft.co.zw/organisationsFinance/getOrganisationsFinanceByFinanceID/${id}`;
+    const URL = `https://chitma.hushsoft.co.zw/api/organisationsFinance/getOrganisationsFinanceByFinanceID/${id}`;
     await axios.get(URL,{
       headers: {'Content-Type': 'application/json',
           // Authorization : 'Bearer ' + token,
@@ -464,7 +464,7 @@ export default {
         try{
           const pp = localStorage.getItem('pp');
       const local = decryptData(pp);
-        await axios.post('https://chitma.hushsoft.co.zw/organisationsFinance/addOrganisationsFinance',{
+        await axios.post('https://chitma.hushsoft.co.zw/api/organisationsFinance/addOrganisationsFinance',{
           'amount': this.payments.amount,  
           'phoneNumber': this.payments.phoneNumber,
           'paymentMethod': this.payments.paymentMethod,
@@ -493,7 +493,7 @@ export default {
   async handleOption (_option) {
       if(_option = 'yes'){
         try{
-        await axios.delete('https://chitma.hushsoft.co.zw/organisationsFinance/deleteOrganisationsFinance/' + this.FID,{
+        await axios.delete('https://chitma.hushsoft.co.zw/api/organisationsFinance/deleteOrganisationsFinance/' + this.FID,{
             headers: {'Content-Type': 'application/json'},
             credentials: 'include'
           }).then((response) =>{
@@ -541,7 +541,7 @@ export default {
         try{
           const pp = localStorage.getItem('pp');
       const local = decryptData(pp);
-        await axios.put(`https://chitma.hushsoft.co.zw/organisationsFinance/updateOrganisationFinanceByFinanceID/${id}`,{
+        await axios.put(`https://chitma.hushsoft.co.zw/api/organisationsFinance/updateOrganisationFinanceByFinanceID/${id}`,{
           'amount': this.finance.amount,  
           'phoneNumber': this.finance.phoneNumber,
           'paymentMethod': this.finance.paymentMethod,
@@ -571,7 +571,7 @@ export default {
     this.loading = true;
     const pp = localStorage.getItem('pp');
       const local = decryptData(pp);
-    const URL = `https://chitma.hushsoft.co.zw/financeDescription/getAllFinanceDescriptions/${local}`;
+    const URL = `https://chitma.hushsoft.co.zw/api/financeDescription/getAllFinanceDescriptions/${local}`;
     await axios.get(URL,{
       headers: {'Content-Type': 'application/json',
           // Authorization : 'Bearer ' + token,

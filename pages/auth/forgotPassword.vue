@@ -47,7 +47,7 @@
                if (Object.keys(this.errors).length === 0) {
            // make API call or submit form data here
            try{
-           await axios.post('https://chitma.hushsoft.co.zw/otp/sendOTP',{
+           await axios.post('https://chitma.hushsoft.co.zw/api/otp/sendOTP',{
               'membershipNumber': this.membershipNumber,
               'phoneNumber': this.phoneNumber
            },{

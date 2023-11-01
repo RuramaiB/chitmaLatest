@@ -230,7 +230,7 @@ export default {
     this.loading = true;
     const pp = localStorage.getItem('pp');
       const local = decryptData(pp);
-    const URL = `https://chitma.hushsoft.co.zw/organisations/getAllOrganisations/${local}`;
+    const URL = `https://chitma.hushsoft.co.zw/api/organisations/getAllOrganisations/${local}`;
     const token = localStorage.token;
     await axios.get(URL,{
       headers: {'Content-Type': 'application/json',
@@ -259,7 +259,7 @@ export default {
         try{
           const pp = localStorage.getItem('pp');
       const local = decryptData(pp);
-        await axios.post('https://chitma.hushsoft.co.zw/organisations',{
+        await axios.post('https://chitma.hushsoft.co.zw/api/organisations',{
           'preachingPoint': local,  
           'organisation': this.org.organisation,
         },{
@@ -282,7 +282,7 @@ export default {
    async handleOption (_option) {
       if(_option = 'yes'){
         try{
-        await axios.delete('https://chitma.hushsoft.co.zw/organisations/deleteOrganisationByID/' + this.ID,{
+        await axios.delete('https://chitma.hushsoft.co.zw/api/organisations/deleteOrganisationByID/' + this.ID,{
             headers: {'Content-Type': 'application/json'},
             credentials: 'include'
           }).then((response) =>{

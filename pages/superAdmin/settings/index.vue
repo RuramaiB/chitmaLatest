@@ -70,7 +70,7 @@ export default {
     async fetchUser(){
       
       this.loading = true;
-      const URL = "https://chitma.hushsoft.co.zw/api/v1/auth/getUserByMembershipNumber/" + localStorage.membershipNumber;
+      const URL = "https://chitma.hushsoft.co.zw/api/api/v1/auth/getUserByMembershipNumber/" + localStorage.membershipNumber;
       await axios.get(URL,{
         headers: {'Content-Type': 'application/json',
             // Authorization : 'Bearer ' + token,
