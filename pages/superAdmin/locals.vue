@@ -65,8 +65,8 @@
                                   Location
                                 </th>
                                 <th scope="col" class="px-6 py-3">
-                                  Prefix
-                                </th>
+                                    Prefix
+                                  </th>
                                 <th scope="col" class="px-6 py-3">
                                     
                                 </th>
@@ -78,7 +78,7 @@
                               <td class="px-6 py-4">{{ item.id }}</td>
                               <td class="px-6 py-4">{{ item.name }}</td>
                               <td class="px-6 py-4">{{ item.location }}</td>
-                            <td class="px-6 py-4">{{ item.prefix }}</td>
+                              <td class="px-6 py-4">{{ item.prefix }}</td>
                               <td class="px-3 py-4">
                                 <a href="#" class="font-medium text-green-500 dark:text-blue-500 hover:underline">
                                   <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"  @click="getLocalByName(item.name)"  class="bi bi-pencil-square" viewBox="0 0 16 16"> <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/> <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z"/> </svg>
@@ -120,6 +120,13 @@
                                 id="location" type="text" v-model="loc.location" >
                                 <p v-if="this.errors.location" class="text-sm text-red-600 text-left mb-2">*{{this.errors.location}}</p>
                             </div>  
+                             <!-- Prefix -->
+                             <div class="mb-4">
+                              <label class="block text-gray-700 text-sm font-bold mb-2" for="location">Prefix:</label>
+                              <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" 
+                                id="location" type="text" v-model="loc.prefix" >
+                                <p v-if="this.errors.prefix" class="text-sm text-red-600 text-left mb-2">*{{this.errors.prefix}}</p>
+                            </div>
                             <!-- Submit Button -->
                             <div class="ml-2">
                               <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" 
@@ -129,23 +136,14 @@
                         </div>
                       </div>
                       <!-- End of Add modal -->
-                <div v-if="editModal" class="z-10 ml-40 pt-24 backdrop-brightness-50 top-0 w-screen h-screen absolute inset-0 flex items-center justify-center">
+                <div v-if="editModal" class="z-10  pt-24 backdrop-brightness-50 top-0 w-screen h-screen absolute inset-0 flex items-center justify-center">
                   <div class="bg-white rounded-lg shadow-md p-5 overflow-y-auto">
                     <!-- Modal Content -->
                     <div class="flex justify-between">
                       <h2 class="text-2xl font-bold mb-4">{{ editModalHeading }}</h2>
                       <button class="bg-red-500 text-white text-xl font-xl px-3 py-1 mt-4 rounded-md" @click="closeEditModal">X</button>
                     </div>
-                    <form @submit.prevent="updateLocal(locs.name)" class=" grid grid-cols-2 gap-12 bg-white shadow-md rounded px-8 py-6 mb-4">
-                      <!-- Circuit -->
-                      <div class="mb-4">
-                        <label class="block text-gray-700 text-sm font-bold mb-2" for="circuit">Circuit:</label>
-                        <select class="shadow appearance-none text-black border rounded w-full py-2 px-3  leading-tight focus:outline-none focus:shadow-outline" 
-                          id="circuit"  v-model="locs.circuit.name">
-                          <!-- <option value="" disabled>Select payment method</option> -->
-                          <option value="Seke North">Seke North</option>
-                        </select>
-                      </div>      
+                    <form @submit.prevent="updateLocal(locs.name)" class=" grid grid-cols-2 gap-12 bg-white shadow-md rounded px-8 py-6 mb-4">     
                       <!-- Local -->
                       <div class="mb-4">
                         <label class="block text-gray-700 text-sm font-bold mb-2" for="local">Local</label>
@@ -158,6 +156,13 @@
                         <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" 
                           id="location" type="text" v-model="locs.location" required>
                       </div>  
+                      <!-- Prefix -->
+                      <div class="mb-4">
+                        <label class="block text-gray-700 text-sm font-bold mb-2" for="location">Prefix:</label>
+                        <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" 
+                           id="location" type="text" v-model="locs.prefix" >
+                          <p v-if="this.errors.prefix" class="text-sm text-red-600 text-left mb-2">*{{this.errors.prefix}}</p>
+                      </div>
                       <!-- Submit Button -->
                       <div class="ml-2">
                         <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" 
@@ -170,9 +175,9 @@
                   <div class="bg-white p-6 rounded-lg">
                     <p class="mb-4">Are you sure you want to delete?</p>
                     <div class="flex justify-end">
-                      <button class="mr-2 px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded" @click="handleOption('yes')">Yes</button>
+                      <button class="mr-2 px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded" @click="handleOption('Yes')">Yes</button>
                       <button
-                        class="px-4 py-2 bg-gray-300 hover:bg-gray-400 text-gray-800 rounded" @click="handleOption('no')">No</button>
+                        class="px-4 py-2 bg-gray-300 hover:bg-gray-400 text-gray-800 rounded" @click="handleOption('No')">No</button>
                     </div>
                   </div>
                 </div>
@@ -345,7 +350,7 @@
         }
       },
      async handleOption (_option) {
-        if(_option = 'yes'){
+        if(_option == 'Yes'){
           try{
           await axios.delete('https://chitma.hushsoft.co.zw/api/local/deleteLocalPreachingPointByName/' + this.name,{
               headers: {'Content-Type': 'application/json'},

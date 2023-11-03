@@ -28,7 +28,6 @@
               <h1 class="text-md font-normal text-gray-800 mb-2">Date of Birth:</h1>
               <h1 class="text-md font-normal text-gray-800 mb-2">Gender:</h1>
               <h1 class="text-md font-normal text-gray-800 mb-2">Phone Number:</h1>
-              <h1 class="text-md font-normal text-gray-800 mb-2">Local:</h1>
               <h1 class="text-md font-normal text-gray-800 mb-2">Organisation:</h1>
               <h1 class="text-md font-normal text-gray-800 mb-4">Role:</h1>
             </div>
@@ -38,7 +37,6 @@
               <h1 class="text-md font-semibold text-gray-900 mb-2">{{this.adminInfo.dateOfBirth}}</h1>
               <h1 class="text-md font-semibold text-gray-900 mb-2">{{this.adminInfo.gender}}</h1>
               <h1 class="text-md font-semibold text-gray-900 mb-2">{{this.adminInfo.phoneNumber}}</h1>
-              <h1 class="text-md font-semibold text-gray-900 mb-2">{{this.adminInfo.locals.name}}</h1>
               <h1 class="text-md font-semibold text-gray-900 mb-2">{{this.adminInfo.organisation}}</h1>
               <h1 class="text-md font-semibold text-gray-900 mb-4">{{this.adminInfo.role}}</h1>
             </div>
@@ -161,7 +159,7 @@ import { encryptData, decryptData } from '@/encryption';
           'dateOfBirth': this.user.dateOfBirth,  
           'organisation': this.user.organisation,  
           'membershipStatus': this.user.membershipStatus,
-          'phoneNumer': this.user.phoneNumber,  
+          'phoneNumber': this.user.phoneNumber,  
           'local': local
         },{
             headers: {'Content-Type': 'application/json'},

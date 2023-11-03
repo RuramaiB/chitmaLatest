@@ -9,6 +9,7 @@
             <div class="relative my-1 z-10">
             <button
             @click="isOpen = !isOpen"
+            v-if="!loading"
             class="inline-flex items-center justify-center  font-bold text-md  text-white border-none"
             aria-expanded="false"
             >
@@ -69,7 +70,7 @@ import 'axios'
         data(){
             return{
                 isOpen: false,
-                loading: false,
+                loading: true,
                 error: null,
                 adminInfo: null,
                 person: null,

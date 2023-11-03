@@ -17,7 +17,7 @@
                             <th scope="col" class="px-3 py-3"></th>
                         </tr>
                     </thead>
-                    <tbody>
+                    <tbody v-if="!loading">
                         <tr v-for="item in filteredItems" :key="item.id" class="bg-white border-b dark:bg-gray-900 dark:border-gray-700">
                           <td class="px-6 py-4">{{ item.id }}</td>
                           <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
@@ -50,7 +50,7 @@
                             <p v-if="this.errors.description" class="text-sm text-red-600 text-left mb-2">*{{this.errors.description}}</p>
                         </div>  
                         <!-- Status-->
-                        <div class="mb-4">
+                        <!-- <div class="mb-4">
                           <label class="block text-gray-700 text-sm font-bold mb-2" for="status">Status</label>
                           <select class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" 
                             id="status" v-model="loc.status" >
@@ -59,7 +59,7 @@
                             <option value="inactive">inactive</option>
                           </select>
                           <p v-if="this.errors.status" class="text-sm text-red-600 text-left mb-2">*{{this.errors.status}}</p>
-                        </div>       
+                        </div>        -->
                        
                         <!-- Submit Button -->
                         <div class="ml-2">
@@ -192,11 +192,11 @@
       async addFinanceDescription(){
               this.errors = {};
               if(!this.loc.description){
-                  this.errors.description = "Location is required";
+                  this.errors.description = "Finance Description is required";
               }
-              if(!this.loc.status){
-                  this.errors.status = "Circuit method is required";
-              }  
+              // if(!this.loc.status){
+              //     this.errors.status = "Status is required";
+              // }  
              
               if (Object.keys(this.errors).length === 0) {
           // make API call or submit form data here
@@ -205,7 +205,8 @@
       const local = decryptData(pp);
           await axios.post('https://chitma.hushsoft.co.zw/api/financeDescription/addNewFinanceDescriptions',{
             'description': this.loc.description,  
-            'status': this.loc.status,
+            // 'status': this.loc.status,
+            'target': 0,
             'local': local,
           },{
               headers: {'Content-Type': 'application/json'},

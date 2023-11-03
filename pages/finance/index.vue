@@ -38,7 +38,7 @@
           >
             <div class="py-1 px-2" role="none">
               <!-- Dropdown options -->
-              <NuxtLink class=" text-black flex flex-cols text-md font-lg cursor-pointer my-3 gap-2" to=".././settings">
+              <NuxtLink class=" text-black flex flex-cols text-md font-lg cursor-pointer my-3 gap-2" to="/">
                 <svg xmlns="http://www.w3.org/2000/svg" height="20" width="20" viewBox="0 0 24 24"> <g> <path fill="none" d="M0 0h24v24H0z"/> <path d="M12 22C6.477 22 2 17.523 2 12S6.477 2 12 2a9.985 9.985 0 0 1 8 4h-2.71a8 8 0 1 0 .001 12h2.71A9.985 9.985 0 0 1 12 22zm7-6v-3h-8v-2h8V8l5 4-5 4z"/> </g> </svg>
                 Logout
               </NuxtLink>
@@ -48,7 +48,7 @@
           
         </div>
     </div>
-    <div class="flex flex-col-2 gap-4 mx-5">
+    <div class="grid grid-cols-4 justify-between mx-5 w-full">
       <div class="py-6">
         <div class="bg-white w-64 h-32 border rounded-lg">
           <div class="flex flex-col-2 p-4">
@@ -126,8 +126,25 @@
       
       </div>
     </div>
-    <!-- <div class=" bg-white borderd rounded-md h-48 ml-5 mr-16"></div> -->
-    <financeGraphs/>
+    <div class="grid grid-cols-2 w-full gap-10 px-5 ">
+      <div class="shadow-lg w-full h-screen rounded-md p-5">
+        <h1 class="text-xl font-semibold text-black">Recent Cash Transactions</h1>
+      </div>
+      <div class="shadow-lg w-full h-screen rounded-md p-5">
+        <h1 class="text-xl font-semibold text-black mb-5">Recent Mobile Transactions</h1>
+        <hr class="w-full border-gray-300 my-2 opacity-10">
+        <div class="flex justify-between">
+          <div class="grid-grid-cols-1">
+            <h1 class="text-lg font-semibold">Ruramai Botso</h1>
+            <h1 class="text-sm font-semibold opacity-50">Tithe</h1>
+          </div>
+          <h1 class="text-2xl mr-2 font-bold text-gray-900">$10</h1>
+
+        </div>
+        <hr class="w-full border-gray-600 my-2 opacity-10">
+      </div>
+    </div>
+    
   </NuxtLayout>
 </template>
 
@@ -138,7 +155,8 @@ export default {
     data(){
       return{
         loading: true,
-        person: ""
+        person: "",
+        isOpen: false,
       }
     },
     methods: {

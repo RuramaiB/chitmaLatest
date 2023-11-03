@@ -38,7 +38,7 @@
         >
           <div class="py-1 px-2" role="none">
             <!-- Dropdown options -->
-            <NuxtLink class=" text-black flex flex-cols text-md font-lg cursor-pointer my-3 gap-2" to="../auth/login">
+            <NuxtLink class=" text-black flex flex-cols text-md font-lg cursor-pointer my-3 gap-2" to="/">
               <svg xmlns="http://www.w3.org/2000/svg" height="20" width="20" viewBox="0 0 24 24"> <g> <path fill="none" d="M0 0h24v24H0z"/> <path d="M12 22C6.477 22 2 17.523 2 12S6.477 2 12 2a9.985 9.985 0 0 1 8 4h-2.71a8 8 0 1 0 .001 12h2.71A9.985 9.985 0 0 1 12 22zm7-6v-3h-8v-2h8V8l5 4-5 4z"/> </g> </svg>
               Logout
             </NuxtLink>
@@ -82,6 +82,9 @@
                                 Status
                               </th>
                               <th scope="col" class="px-4 py-3">
+                                Phone Number
+                              </th>
+                              <th scope="col" class="px-4 py-3">
                                 Local
                               </th>
                               <th scope="col" class="px-4 py-3">
@@ -108,6 +111,7 @@
                             <td class="px-4 py-4">{{ item.dateOfBirth }}</td>
                             <td class="px-4 py-4">{{ item.organisation }}</td>
                             <td class="px-4 py-4">{{ item.membershipStatus }}</td>
+                            <td class="px-4 py-4">{{ item.phoneNumber }}</td>
                             <td class="px-4 py-4">{{ item.locals.name }}</td>
                             <td class="px-4 py-4">{{ item.section.name }}</td>
                             <td class="px-4 py-4">{{ item.role }}</td>
@@ -124,7 +128,7 @@
                           </tr>
                       </tbody>
                   </table>
-                  <div class="text-md text-white flex flex-row justify-end bg-green-900 px-8 lg:w-full md:w-screen">
+                  <div v-if="!loading" class="text-md text-white flex flex-row justify-end bg-green-900 px-8 lg:w-full md:w-screen">
                         <button class="p-3" @click="getAllUsers(pageNumber)"  v-for="pageNumber in this.result.totalPages" :key="pageNumber">
                           {{ pageNumber }} 
                         </button>
@@ -208,7 +212,13 @@
                             <p v-if="this.errors.section" class="text-sm text-red-600 text-left mb-2">*{{this.errors.section}}</p>
                           </div>
                         <!-- Section -->
-                           
+                             <!-- Phone Number -->
+                             <div class="mb-4">
+                            <label class="block text-gray-700 text-sm font-bold mb-2" for="local">Phone Number:</label>
+                            <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" 
+                              id="lastname" type="text" v-model="users.phoneNumber" >
+                              <p v-if="this.errors.phoneNumber" class="text-sm text-red-600 text-left mb-2">*{{this.errors.phoneNumber}}</p>
+                          </div> 
                            <!-- Role -->
                            <div class="mb-4">
                             <label class="block text-gray-700 text-sm font-bold mb-2" for="role">Role</label>
@@ -308,7 +318,13 @@
                             </select>
                             <p v-if="this.errors.membershipStatus" class="text-sm text-red-600 text-left mb-2">*{{this.errors.membershipStatus}}</p>
                           </div>
-                           
+                                 <!-- Phone Number -->
+                                 <div class="mb-4">
+                            <label class="block text-gray-700 text-sm font-bold mb-2" for="local">Phone Number:</label>
+                            <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" 
+                              id="lastname" type="text" v-model="account.phoneNumber" >
+                              <p v-if="this.errors.phoneNumber" class="text-sm text-red-600 text-left mb-2">*{{this.errors.phoneNumber}}</p>
+                          </div>
                            <!-- Section -->
                        <div class="mb-4">
                         <label class="block text-gray-700 text-sm font-bold mb-2" for="section">Section:</label>
@@ -489,6 +505,9 @@ export default {
              if(!this.users.section){
                  this.errors.section = "Section is required";
              } 
+             if(!this.users.phoneNumber){
+                 this.errors.phoneNumber = "Phone number is required";
+             } 
              if(!this.users.password){
                  this.errors.password = "Enter password";
              } 
@@ -514,6 +533,7 @@ export default {
           'membershipStatus': this.users.membershipStatus,  
           'section': this.users.section, 
           'password': this.users.password,   
+          'phoneNumber': this.users.phoneNumber,
           'local': local,
         },{
             headers: {'Content-Type': 'application/json'},
@@ -583,6 +603,9 @@ export default {
              if(!this.account.membershipStatus){
                  this.errors.membershipStatus = "Membership Status is required";
              }
+             if(!this.account.phoneNumber){
+                 this.errors.phoneNumber = "Phone number is required";
+             }
              if(!this.account.section){
                  this.errors.section = "Section is required";
              }            
@@ -600,6 +623,7 @@ export default {
           'organisation': this.account.organisation,  
           'membershipStatus': this.account.membershipStatus,  
           'section': this.account.section, 
+          'phoneNumber': this.account.phoneNumber,
           'local': local,
         },{
             headers: {'Content-Type': 'application/json'},
@@ -619,7 +643,7 @@ export default {
       }
     },
    async handleOption (_option) {
-      if(_option = 'yes'){
+      if(_option == 'yes'){
         try{
         await axios.delete('https://chitma.hushsoft.co.zw/api/api/v1/auth/deleteUserByMembershipNumber/' + this.membershipNumber,{
             headers: {'Content-Type': 'application/json'},

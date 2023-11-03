@@ -38,7 +38,7 @@
         >
           <div class="py-1 px-2" role="none">
             <!-- Dropdown options -->
-            <NuxtLink class=" text-black flex flex-cols text-md font-lg cursor-pointer my-3 gap-2" to="../auth/login">
+            <NuxtLink class=" text-black flex flex-cols text-md font-lg cursor-pointer my-3 gap-2" to="/">
               <svg xmlns="http://www.w3.org/2000/svg" height="20" width="20" viewBox="0 0 24 24"> <g> <path fill="none" d="M0 0h24v24H0z"/> <path d="M12 22C6.477 22 2 17.523 2 12S6.477 2 12 2a9.985 9.985 0 0 1 8 4h-2.71a8 8 0 1 0 .001 12h2.71A9.985 9.985 0 0 1 12 22zm7-6v-3h-8v-2h8V8l5 4-5 4z"/> </g> </svg>
               Logout
             </NuxtLink>
@@ -49,13 +49,13 @@
       </div>
   </div> 
   <div class="mx-4 lg:w-full md: w-screen">
-    <div class="grid gap-6 lg:grid-cols-6 py-4 md:grid-cols-3">
+    <div v-if="!loading" class="grid gap-6 lg:grid-cols-5 py-4 md:grid-cols-3">
       <!-- Grid starts here -->
       <div class="flex items-center bg-blue-500 rounded shadow-sm justify-between p-5">
           <div>
               <div class="text-sm text-gray-50">Total Users</div>
           <div class="flex items-center pt-1">
-              <div class="text-3xl font-medium text-gray-600 p-1">120</div>        
+              <div class="text-3xl font-medium text-gray-600 p-1">{{ this.OrgCounts.total }}</div>        
           </div>                          
           </div>
           <div class="text-gray-100">
@@ -68,7 +68,7 @@
           <div>
               <div class="text-sm text-gray-50">UMYF</div>
           <div class="flex items-center pt-1">
-              <div class="text-3xl font-medium text-gray-600 p-1">20</div>        
+              <div class="text-3xl font-medium text-gray-600 p-1">{{ this.OrgCounts.umyf }}</div>        
           </div>                          
           </div>
           <div class="text-gray-100">
@@ -81,7 +81,7 @@
         <div>
             <div class="text-sm text-gray-50">JSS</div>
         <div class="flex items-center pt-1">
-            <div class="text-3xl font-medium text-gray-600 p-1">20</div>        
+            <div class="text-3xl font-medium text-gray-600 p-1">{{ this.OrgCounts.jss }}</div>        
         </div>                          
         </div>
         <div class="text-gray-100">
@@ -94,7 +94,7 @@
         <div>
             <div class="text-sm text-gray-50">RRW</div>
         <div class="flex items-center pt-1">
-            <div class="text-3xl font-medium text-gray-600 p-1">50</div>        
+            <div class="text-3xl font-medium text-gray-600 p-1">{{ this.OrgCounts.rrw }}</div>        
         </div>                          
         </div>
         <div class="text-gray-100">
@@ -107,7 +107,7 @@
         <div>
             <div class="text-sm text-gray-50">MUMC</div>
         <div class="flex items-center pt-1">
-            <div class="text-3xl font-medium text-gray-600 p-1">30</div>        
+            <div class="text-3xl font-medium text-gray-600 p-1">{{ this.OrgCounts.mumc }}</div>        
         </div>                          
         </div>
         <div class="text-gray-100">
@@ -116,19 +116,6 @@
                 </svg>
             </div>
     </div>
-    <div class="flex items-center bg-blue-500 rounded shadow-sm justify-between p-5">
-          <div>
-              <div class="text-sm text-gray-50">Total Users</div>
-          <div class="flex items-center pt-1">
-              <div class="text-3xl font-medium text-gray-600 p-1">120</div>        
-          </div>                          
-          </div>
-          <div class="text-gray-100">
-                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-8 h-8">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M12.75 15l3-3m0 0l-3-3m3 3h-7.5M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                  </svg>
-              </div>
-      </div>
   
       <!-- Grid ends here -->
   </div>
@@ -272,6 +259,7 @@ export default {
     locs:[],
     pages:[],
     result:[],
+    OrgCounts: '',
     page: '0',
     totalPages: ''
     };
@@ -329,7 +317,6 @@ export default {
       this.loading = true;
       const mN = localStorage.getItem('mN');
       const mbnD = decryptData(mN);
-      console.log("Munhu uyu",mbnD)
       const URL = `https://chitma.hushsoft.co.zw/api/api/v1/auth/getUserByMembershipNumber/${mbnD}`;
       await axios.get(URL,{
         headers: {'Content-Type': 'application/json',
@@ -347,11 +334,31 @@ export default {
   
       }).finally(() => this.loading = false);
       },
+      async getOrganisationCounts(){
+      this.loading = true;
+      const pp = localStorage.getItem('pp');
+      const local = decryptData(pp);
+      const URL = `https://chitma.hushsoft.co.zw/api/api/v1/auth/getUsersCountByOrganisationAnd/${local}`;
+      await axios.get(URL,{
+        headers: {'Content-Type': 'application/json',
+            // Authorization : 'Bearer ' + token,
+            'Access-Control-Allow-Origin': '*'}
+      }).then((res) =>
+       {
+        this.OrgCounts = res.data
+      }) .catch(error => {
+        console.log(error.code)
+        this.error=error.code;
+        this.errored = true
+  
+      }).finally(() => this.loading = false);
+      },
  
 },
 mounted(){
     this.getAllUsers(1)
     this.getAdminInfo()
+    this.getOrganisationCounts()
   }
 }
 </script>
