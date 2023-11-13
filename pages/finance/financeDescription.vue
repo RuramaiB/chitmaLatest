@@ -82,7 +82,7 @@
               </div>
             </div>
            
-  </div>  
+      </div>  
       
     </NuxtLayout>
       
@@ -214,6 +214,8 @@
             }).then((response) =>{
             const data = response.data;
             alert("Finance Description added successfully.")
+            this.closeAddModal()
+            reloadNuxtApp()
             this.response = data;
             console.log(response);
           })
@@ -235,6 +237,7 @@
             const data = response.data;
             alert("Local Finance Record deleted successfully.")
             this.closeDeleteModal()
+            reloadNuxtApp()
             this.response = data;
             console.log(response);
           })

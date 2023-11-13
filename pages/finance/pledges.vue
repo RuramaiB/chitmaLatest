@@ -438,6 +438,8 @@ export default {
           }).then((response) =>{
           const data = response.data;
           alert("Pledge record added successfully.")
+          this.closeAddModal()
+            reloadNuxtApp()
           this.response = data;
           console.log(response);
         })
@@ -489,6 +491,8 @@ export default {
           }).then((response) =>{
           const data = response.data;
           alert("Pledge updated successfully.")
+          this.closeEditModal()
+            reloadNuxtApp()
           this.response = data;
           console.log(response);
         })
@@ -510,6 +514,7 @@ export default {
           const data = response.data;
           alert("Local Finance Record deleted successfully.")
           this.closeDeleteModal()
+            reloadNuxtApp()
           this.response = data;
           console.log(response);
         })

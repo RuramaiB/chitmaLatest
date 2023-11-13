@@ -23,9 +23,9 @@
                 </div>
               </div>
                   <div>
-                    
+                    <!-- Add Button -->
                     <button class="text-black border-2 border-blue-600 bg-white px-4 py-1 rounded-lg m-1" @click="openAddModal">Allocate</button>
-                    <button class="text-black border-2 border-blue-600 bg-white px-4 py-1 rounded-lg m-1" @click="openAddModal">Reset</button>
+                    <button class="text-black border-2 border-blue-600 bg-white px-4 py-1 rounded-lg m-1" @click="resetFinancialTargets">Reset</button>
                   </div>
               </div>
          
@@ -50,6 +50,7 @@
                                   Amount
                                 </th>
                                 <th scope="col" class="px-3 py-3"></th>
+                                
                             </tr>
                         </thead>
                         <tbody v-if="!loading">
@@ -62,19 +63,73 @@
                               <td class="px-6 py-4">{{ item.level}}</td>
                               <td class="px-6 py-4">{{ item.amount}}</td>
                               <td class="px-3 py-4">
-                                <a href="#" class="font-medium text-green-500 dark:text-blue-500 hover:underline">
+                                <a href="#"  @click="fetchFinancialTargetByID(item.id)" class="font-medium text-green-500 dark:text-blue-500 hover:underline">
                                   <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"   class="bi bi-pencil-square" viewBox="0 0 16 16"> <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/> <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z"/> </svg>
                                 </a >
                               </td>
+                             
                             </tr>
                         </tbody>
                     </table>
                     <div v-if="!loading" class="text-md text-white flex flex-row justify-end bg-blue-900 px-8 w-full">
-                          <button class="p-3" @click="getAllFinancialTargets(pageNumber)"  v-for="pageNumber in result.totalPages" :key="pageNumber">
+                          <button class="p-3" @click="getAllFinancialTargets(pageNumber)"  v-for="pageNumber in result.totalPages.value" :key="pageNumber">
                             {{ pageNumber }} 
                           </button>
                     </div>
-                </div>               
+                </div>
+                  <!--  Add Modal -->
+                  <div v-if="addModal" class="z-10 pt-36 backdrop-brightness-50 top-0 w-screen h-screen absolute inset-0 flex items-center justify-center">
+                        <div class="bg-white rounded-lg shadow-md p-5 overflow-y-auto">
+                          <!-- Modal Content -->
+                          <div class="flex justify-between">
+                            <h2  class="text-2xl font-bold mb-4">Add new Financial Target</h2>
+                            <button class="bg-red-500 text-white text-xl font-xl px-3 py-1 mt-4 rounded-md" @click="closeAddModal">X</button>
+                          </div>
+                          <p v-if="loading">Processing the payment request</p>
+                          <form  v-else @submit.prevent="allocateOrgFinancialTargets()" class=" grid grid-cols-2 gap-12 bg-white shadow-md rounded px-8 py-6 mb-4">
+                             <!-- Description -->
+                             <div class="mb-4">
+                              <label class="block text-gray-700 text-sm font-bold mb-2" for="level">Description:</label>
+                              <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" 
+                                id="level" type="text" v-model="targets.description" >
+                                <p v-if="this.errors.level" class="text-sm text-red-600 text-left mb-2">*{{this.errors.level}}</p>
+                            </div>  
+                            <!-- Submit Button -->
+                            <div class="ml-2">
+                              <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" 
+                              >Submit</button>
+                            </div>
+                          </form>        
+                        </div>
+                  </div>
+                <!-- End of Add modal -->
+               <!--  Edit Modal -->
+               <div v-if="editModal" class="z-10 pt-36 backdrop-brightness-50 top-0 w-screen h-screen absolute inset-0 flex items-center justify-center">
+                        <div class="bg-white rounded-lg shadow-md p-5 overflow-y-auto">
+                          <!-- Modal Content -->
+                          <div class="flex justify-between">
+                            <h2  class="text-2xl font-bold mb-4">Update Financial Target</h2>
+                            <button class="bg-red-500 text-white text-xl font-xl px-3 py-1 mt-4 rounded-md" @click="closeEditModal">X</button>
+                          </div>
+                          <p v-if="loading">Processing the payment request</p>
+                          <form  v-else @submit.prevent="updateOrgFinancialTargets(fTargets.id)" class=" grid grid-cols-2 gap-12 bg-white shadow-md rounded px-8 py-6 mb-4">
+                             <!-- Description -->
+                             <div class="mb-4">
+                              <label class="block text-gray-700 text-sm font-bold mb-2" for="level">Amount:</label>
+                              <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" 
+                                 type="text" v-model="fTargets.amount" >
+                                <p v-if="this.errors.amount" class="text-sm text-red-600 text-left mb-2">*{{this.errors.amount}}</p>
+                            </div>  
+                            
+                            <!-- Submit Button -->
+                            <div class="ml-2">
+                              <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" 
+                              >Submit</button>
+                            </div>
+                          </form>        
+                        </div>
+                  </div>
+                <!-- End of edit modal -->
                 <div v-if="deleteModal" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-10">
                   <div class="bg-white p-6 rounded-lg">
                     <p class="mb-4">Are you sure you want to delete?</p>
@@ -106,6 +161,7 @@
         addModalHeading: 'Add new finance description',
         loading:true,
         isOpen: false,
+        fTargets: [],
         name: '',
         person:'',
         item: [],
@@ -153,7 +209,7 @@
       pageNumber -=1;
       const pp = localStorage.getItem('pp');
       const local = decryptData(pp);
-      const URL = `https://chitma.hushsoft.co.zw/api/financialTargets/getAllFinancialTargetsByLocal/${local}/${pageNumber}`;
+      const URL = `https://chitma.hushsoft.co.zw/api/financialTargets/getAllOrganisationsFinancialTargets/${local}/${pageNumber}`;
       await axios.get(URL,{
         headers: {'Content-Type': 'application/json',
             // Authorization : 'Bearer ' + token,
@@ -170,6 +226,64 @@
         this.errored = true
   
       }).finally(() => this.loading = false);
+      },
+      async updateOrgFinancialTargets(id){
+        try{
+            const pp = localStorage.getItem('pp');
+            const local = decryptData(pp);
+          await axios.put(`https://chitma.hushsoft.co.zw/api/financialTargets/updateOrganisationFinancialTarget/${local}/${this.fTargets.amount}/${id}`,{
+              headers: {'Content-Type': 'application/json'},
+              credentials: 'include'
+            }).then((response) =>{
+            const data = response.data;
+            alert("Organisational targets updated successfully.")
+            reloadNuxtApp()
+            this.response = data;
+          })
+          }catch(err){
+          console.log("Error:",err)
+          this.errors.failed = "Sorry, an error occured!";
+          this.errors.ERR = err;
+          }
+      },
+      async allocateOrgFinancialTargets(){
+        try{
+            const pp = localStorage.getItem('pp');
+            const local = decryptData(pp);
+          await axios.post('https://chitma.hushsoft.co.zw/api/financialTargets/distributeFinancialTargetForOrganisations',{
+            'financialDescription': this.targets.description,  
+            'local': local,
+          },{
+              headers: {'Content-Type': 'application/json'},
+              credentials: 'include'
+            }).then((response) =>{
+            const data = response.data;
+            alert("Organisational targets allocated successfully.")
+            reloadNuxtApp()
+            this.response = data;
+          })
+          }catch(err){
+          console.log("Error:",err)
+          this.errors.failed = "Sorry, an error occured!";
+          this.errors.ERR = err;
+          }
+      },
+      async resetFinancialTargets(){
+        try{
+          await axios.delete('https://chitma.hushsoft.co.zw/api/financialTargets/resetOrganisationFinancialTargets', {
+              headers: {'Content-Type': 'application/json'},
+              credentials: 'include'
+            }).then((response) =>{
+            const data = response.data;
+            alert("Organisational targets reset was successfully.")
+            reloadNuxtApp()
+            this.response = data;
+          })
+          }catch(err){
+          console.log("Error:",err)
+          this.errors.failed = "Sorry, an error occured!";
+          this.errors.ERR = err;
+          }
       },
       async addFinancialTarget(){
               this.errors = {};
@@ -210,7 +324,7 @@
           console.log("Form submitted successfully");
         }
       },
-     async handleOption (_option) {
+      async handleOption (_option) {
         if(_option = 'yes'){
           try{
           await axios.delete('https://chitma.hushsoft.co.zw/api/local/deleteLocalPreachingPointByName/' + this.name,{
@@ -236,6 +350,25 @@
         this.closeDeleteModal();
       } 
       },
+      async fetchFinancialTargetByID(id){
+          this.loading = true;
+    const URL = `https://chitma.hushsoft.co.zw/api/financialTargets/getFinancialTargetBy/${id}`;
+    // const token = localStorage.token;
+    await axios.get(URL,{
+      headers: {'Content-Type': 'application/json',
+          // Authorization : 'Bearer ' + token,
+          'Access-Control-Allow-Origin': '*'}
+    }).then((res) =>
+     {
+      this.fTargets = res.data
+      this.editModal = true;
+    }) .catch(error => {
+      console.log(error.code)
+      this.error=error.code;
+      this.errored = true
+
+    }).finally(() => this.loading = false);
+    },
       async getAdminInfo(){
       this.loading = true;
       const mN = localStorage.getItem('mN');

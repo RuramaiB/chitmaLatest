@@ -90,22 +90,22 @@
                         class="group relative flex justify-center rounded px-2 py-1.5 text-gray-500 hover:bg-gray-50 hover:text-gray-700"
                       >
                       <NuxtLink to="/finance/financeDescription/"> 
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" class="opacity-70" viewBox="0 0 512 512"><title>ionicons-v5-e</title><path d="M336,264.13V436c0,24.3-19.05,44-42.95,44H107C83.05,480,64,460.3,64,436V172a44.26,44.26,0,0,1,44-44h94.12a24.55,24.55,0,0,1,17.49,7.36l109.15,111A25.4,25.4,0,0,1,336,264.13Z" style="fill:none;stroke:#000;stroke-linejoin:round;stroke-width:32px"/><path d="M200,128V236a28.34,28.34,0,0,0,28,28H336" style="fill:none;stroke:#000;stroke-linecap:round;stroke-linejoin:round;stroke-width:32px"/><path d="M176,128V76a44.26,44.26,0,0,1,44-44h94a24.83,24.83,0,0,1,17.61,7.36l109.15,111A25.09,25.09,0,0,1,448,168V340c0,24.3-19.05,44-42.95,44H344" style="fill:none;stroke:#000;stroke-linejoin:round;stroke-width:32px"/><path d="M312,32V140a28.34,28.34,0,0,0,28,28H448" style="fill:none;stroke:#000;stroke-linecap:round;stroke-linejoin:round;stroke-width:32px"/></svg>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" class="opacity-70" viewBox="0 0 512 512"><path d="M336,264.13V436c0,24.3-19.05,44-42.95,44H107C83.05,480,64,460.3,64,436V172a44.26,44.26,0,0,1,44-44h94.12a24.55,24.55,0,0,1,17.49,7.36l109.15,111A25.4,25.4,0,0,1,336,264.13Z" style="fill:none;stroke:#000;stroke-linejoin:round;stroke-width:32px"/><path d="M200,128V236a28.34,28.34,0,0,0,28,28H336" style="fill:none;stroke:#000;stroke-linecap:round;stroke-linejoin:round;stroke-width:32px"/><path d="M176,128V76a44.26,44.26,0,0,1,44-44h94a24.83,24.83,0,0,1,17.61,7.36l109.15,111A25.09,25.09,0,0,1,448,168V340c0,24.3-19.05,44-42.95,44H344" style="fill:none;stroke:#000;stroke-linejoin:round;stroke-width:32px"/><path d="M312,32V140a28.34,28.34,0,0,0,28,28H448" style="fill:none;stroke:#000;stroke-linecap:round;stroke-linejoin:round;stroke-width:32px"/></svg>
                       </NuxtLink>
                         <span
                           class="absolute left-full top-1/2 ml-4 -translate-y-1/2 rounded bg-gray-900 px-2 py-1.5 text-xs font-medium text-white opacity-0 group-hover:opacity-100 md:invisible lg:visible"
                         >
-                         Finance Categories
+                         Finance Description
                         </span>
                       </a>
                     </li>
-                    <!-- <li>
+                    <li>
                       <a
                         href=""
                         class="group relative flex justify-center rounded px-2 py-1.5 text-gray-500 hover:bg-gray-50 hover:text-gray-700"
                       >
                       <NuxtLink to="/finance/financialTargets"> 
-                        <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-gray-500 opacity-70" viewBox="0 0 256 256"><rect width="256" height="256" fill="none"/><line x1="96" y1="128" x2="160" y2="128" fill="none" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="8"/><line x1="96" y1="160" x2="160" y2="160" fill="none" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="8"/><path d="M56,40H200a8,8,0,0,1,8,8V200a24,24,0,0,1-24,24H72a24,24,0,0,1-24-24V48A8,8,0,0,1,56,40Z" fill="none" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="8"/><line x1="80" y1="24" x2="80" y2="56" fill="none" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="8"/><line x1="128" y1="24" x2="128" y2="56" fill="none" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="8"/><line x1="176" y1="24" x2="176" y2="56" fill="none" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="8"/></svg>
+                        <svg xmlns="http://www.w3.org/2000/svg" height="24" width="24" viewBox="0 0 256 256"><rect width="256" height="256" fill="none"/><circle cx="128" cy="128" r="48" opacity="0.2"/><line x1="128" y1="128" x2="224" y2="32" fill="none" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="16"/><path d="M195.9,60.1a96.2,96.2,0,1,0,18.7,26.5" fill="none" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="16"/><path d="M161.9,94.1a47.9,47.9,0,1,0,14,31.2" fill="none" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="16"/></svg>
                       </NuxtLink>
                         <span
                           class="absolute left-full top-1/2 ml-4 -translate-y-1/2 rounded bg-gray-900 px-2 py-1.5 text-xs font-medium text-white opacity-0 group-hover:opacity-100"
@@ -113,7 +113,7 @@
                          Financial Targets
                         </span>
                       </a>
-                    </li> -->
+                    </li>
                     <li>
                       <a
                         href=""

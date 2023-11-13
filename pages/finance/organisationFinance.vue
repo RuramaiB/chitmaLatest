@@ -211,7 +211,7 @@
                             <td class="px-4 py-4">{{ item.user.lastname }}</td>
                             <td class="px-4 py-4">{{ item.phoneNumber }}</td>
                             <td class="px-4 py-4">{{ item.paymentMethod }}</td>
-                            <td class="px-4 py-4">{{ item.description }}</td>
+                            <td class="px-4 py-4">{{ item.financeDescription.description }}</td>
                             <td class="px-4 py-4">{{ item.currency }}</td>
                             <td class="px-4 py-4">{{ item.amount }}</td>
                           <td class="px-3 py-4">
@@ -480,8 +480,9 @@ export default {
           }).then((response) =>{
           const data = response.data;
           alert("Organisations Finance Record added successfully.")
+          this.closeAddModal()
+            reloadNuxtApp()
           this.response = data;
-          console.log(response);
         })
         }catch(err){
         console.log("Error:",err)
@@ -501,6 +502,7 @@ export default {
           const data = response.data;
           alert("Organisation Finance Record deleted successfully.")
           this.closeDeleteModal()
+            reloadNuxtApp()
           this.response = data;
           console.log(response);
         })
@@ -557,6 +559,8 @@ export default {
           }).then((response) =>{
           const data = response.data;
           alert("Local Finance Record updated successfully.")
+          this.closeEditModal()
+            reloadNuxtApp()
           this.response = data;
           console.log(response);
         })

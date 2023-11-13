@@ -126,23 +126,33 @@
       
       </div>
     </div>
-    <div class="grid grid-cols-2 w-full gap-10 px-5 ">
-      <div class="shadow-lg w-full h-screen rounded-md p-5">
+    <div class="grid grid-cols-2 gap-10 px-5 ">
+      <div class="shadow-lg h-full rounded-md p-5">
         <h1 class="text-xl font-semibold text-black">Recent Cash Transactions</h1>
       </div>
-      <div class="shadow-lg w-full h-screen rounded-md p-5">
-        <h1 class="text-xl font-semibold text-black mb-5">Recent Mobile Transactions</h1>
-        <hr class="w-full border-gray-300 my-2 opacity-10">
+      <div v-if="!loading" class="shadow-lg h-full rounded-md p-5">
         <div class="flex justify-between">
-          <div class="grid-grid-cols-1">
-            <h1 class="text-lg font-semibold">Ruramai Botso</h1>
-            <h1 class="text-sm font-semibold opacity-50">Tithe</h1>
-          </div>
-          <h1 class="text-2xl mr-2 font-bold text-gray-900">$10</h1>
-
+          <h1 class="text-xl font-semibold text-gray-700 mb-5">Recent Transactions</h1>
+          <NuxtLink to="/finance/localFinance" class="text-sm font-semibold text-gray-700">Explore more</NuxtLink>
         </div>
-        <hr class="w-full border-gray-600 my-2 opacity-10">
-      </div>
+        
+        <hr class="w-full border-gray-300 my-2 opacity-10">
+        <div v-for="item in this.items">
+          <div class="flex justify-between">
+            <div class="grid-grid-cols-1">
+            <h1 class="text-lg font-semibold">{{item.madeBy}}</h1>
+            <div class="flex">
+              <h1 class="text-sm font-semibold opacity-90 mr-1">{{ item.paymentType }} .</h1>
+              <h1 class="text-sm font-semibold opacity-80">{{ item.financeDescription }}</h1>
+            </div>
+            
+          </div>
+          <h1 class="text-2xl mr-2 font-bold text-gray-900">${{item.amount}}</h1>
+          </div>
+          <hr class="w-full border-gray-600 my-2 opacity-10">          
+        </div>
+        
+    </div>
     </div>
     
   </NuxtLayout>
@@ -157,6 +167,7 @@ export default {
         loading: true,
         person: "",
         isOpen: false,
+        items:[]
       }
     },
     methods: {
@@ -182,9 +193,30 @@ export default {
   
       }).finally(() => this.loading = false);
       },
+      async getRecentTransactions(){
+      this.loading = true;
+      const pp = localStorage.getItem('pp');
+      const local = decryptData(pp);
+      const URL = `https://chitma.hushsoft.co.zw/api/statistics/getRecentTransactionBy/${local}`;
+      await axios.get(URL,{
+        headers: {'Content-Type': 'application/json',
+            // Authorization : 'Bearer ' + token,
+            'Access-Control-Allow-Origin': '*'}
+      }).then((res) =>
+       {
+        this.items = res.data;
+        console.log("these are the items: ", this.items)
+      }) .catch(error => {
+        console.log(error.code)
+        this.error=error.code;
+        this.errored = true
+  
+      }).finally(() => this.loading = false);
+      },
     },
     mounted(){
       this.getAdminInfo()
+      this.getRecentTransactions()
     }
 }
 </script>

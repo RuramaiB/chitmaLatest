@@ -270,6 +270,8 @@ export default {
           }).then((response) =>{
           const data = response.data;
           alert("Organisation added successfully.")
+          this.closeAddModal()
+            reloadNuxtApp()
           this.response = data;
           console.log(response);
         })
@@ -291,15 +293,16 @@ export default {
           const data = response.data;
           alert("Organisation deleted successfully.")
           this.closeDeleteModal()
+            reloadNuxtApp()
           this.response = data;
-          console.log(response);
+          
         })
         }catch(err){
         console.log("Error:",err)
         this.errors.failed = "Sorry, an error occured!";
         this.errors.ERR = err;
         }
-        console.log("Form submitted successfully");
+        
     }
     else if(_option = 'no'){
       this.name = ''

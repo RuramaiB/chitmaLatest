@@ -465,8 +465,10 @@ export default {
           }).then((response) =>{
           const data = response.data;
           alert("Section Finance Record added successfully.")
+          this.closeAddModal()
+            reloadNuxtApp()
           this.response = data;
-          console.log(response);
+          
         })
         }catch(err){
         console.log("Error:",err)
@@ -486,6 +488,7 @@ export default {
           const data = response.data;
           alert("Section Finance Record deleted successfully.")
           this.closeDeleteModal()
+            reloadNuxtApp()
           this.response = data;
           console.log(response);
         })
@@ -545,8 +548,10 @@ export default {
           }).then((response) =>{
           const data = response.data;
           alert("Section finance updated successfully.")
+          this.closeEditModal()
+            reloadNuxtApp()
           this.response = data;
-          console.log(response);
+          
         })
         }catch(err){
         console.log("Error:",err)

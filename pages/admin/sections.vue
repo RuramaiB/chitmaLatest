@@ -51,7 +51,7 @@
     <div class="mt-1 p-4 gap-3">
       <div class="bg-white  rounded shadow-sm">
         <button class="text-black border-2 border-green-600 bg-white px-4 py-1 rounded-lg m-1" @click="openAddModal">Add</button>
-        <button class="text-black border-2 border-green-600 bg-white px-4 py-1 rounded-lg m-1" @click="exportExcel">Export</button>
+        <button class="text-black border-2 border-green-600 bg-white px-4 py-1 rounded-lg m-1" @click="exportToExcel">Export</button>
       </div>
       
               <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
@@ -174,6 +174,7 @@
 
 <script>
 import axios from 'axios'
+// import XLSX from 'xlsx';
 import { encryptData, decryptData } from '@/encryption';
 export default {
   data() {
@@ -302,15 +303,17 @@ export default {
           }).then((response) =>{
           const data = response.data;
           alert("Section added successfully.")
+          this.closeAddModal()
+            reloadNuxtApp()
           this.response = data;
-          console.log(response);
+
         })
         }catch(err){
         console.log("Error:",err)
         this.errors.failed = "Sorry, an error occured!";
         this.errors.ERR = err;
         }
-        console.log("Form submitted successfully");
+
       }
     },
    async handleOption (_option) {
@@ -323,6 +326,7 @@ export default {
           const data = response.data;
           alert("Section deleted successfully.")
           this.closeDeleteModal()
+            reloadNuxtApp()
           this.response = data;
           console.log(response);
         })
@@ -360,6 +364,38 @@ export default {
   
       }).finally(() => this.loading = false);
       },
+    // async exportToExcel() {
+    //   try {
+    //     const pp = localStorage.getItem('pp');
+    //     const local = decryptData(pp);
+    //     const response = await axios.get(`https://chitma.hushsoft.co.zw/api/sections/getAllSections/${local}/0`);
+    //     const sections = response.data;
+
+    //     const worksheet = XLSX.utils.json_to_sheet(sections);
+    //     const workbook = XLSX.utils.book_new();
+    //     XLSX.utils.book_append_sheet(workbook, worksheet, 'Sections');
+    //     const excelBuffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
+    //     const blob = new Blob([excelBuffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+    //     const fileName = 'sections.xlsx';
+    //     if (navigator.msSaveBlob) {
+    //       navigator.msSaveBlob(blob, fileName);
+    //     } else {
+    //       const link = document.createElement('a');
+    //       if (link.download !== undefined) {
+    //         const url = URL.createObjectURL(blob);
+    //         link.setAttribute('href', url);
+    //         link.setAttribute('download', fileName);
+    //         link.style.visibility = 'hidden';
+    //         document.body.appendChild(link);
+    //         link.click();
+    //         document.body.removeChild(link);
+    //       }
+    //     }
+    //   } catch (error) {
+    //     console.error(error);
+    //   }
+    // },
+
       openAddModal() {
         this.addModal = true;
       },
@@ -373,32 +409,6 @@ export default {
       closeDeleteModal() {
         this.deleteModal = false;
       },
-     exportExcel(){
-        import("../../plugins/Export2Excel").then((excel) =>{
-          const obj = this.items
-          const HEADER = ["ID", "Circuit", "Local"];
-          const field = ["id", "locals", "name"];
-          const Data = this.FormatJson(field, obj)
-          excel.export_json_to_excel({
-            header:HEADER,
-            data: Data,
-            sheetName: "Name of sheets",
-            filename:"Sections",
-            autoWidth:true,
-            bookType:"xlsx"
-          })
-        })
-     }, 
-     FormatJson(FilterData, JsonData){
-      return JsonData.map((v) =>FilterData.map((j => {
-        if(j == "locals"){
-          return v["locals"]["circuit"]["name"]
-        //  console.log("this is the ", v["locals"]["circuit"]["name"])
-        }
-        
-        return v[j]
-      })))
-     }
   },
   mounted(){
     this.getAllSections(1)

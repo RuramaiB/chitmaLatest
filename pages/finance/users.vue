@@ -302,37 +302,6 @@
         closeDeleteModal() {
           this.deleteModal = false;
         },
-        exportExcel(){
-          import("../../plugins/Export2Excel").then((excel) =>{
-            const obj = this.items
-            const HEADER = ["ID", "First Name", "Last Name", "Gender", "Date Of Birth","Organisation","Circuit","Locals","Section", "Membership Status","Role"];
-            const field = ["id", "firstname", "lastname", "gender", "dateOfBirth", "organisation","circuit", "locals","section", "membershipStatus", "role"];
-            const Data = this.FormatJson(field, obj)
-            excel.export_json_to_excel({
-              header:HEADER,
-              data: Data,
-              sheetName: "Name of sheets",
-              filename:"Accounts",
-              autoWidth:true,
-              bookType:"xlsx"
-            })
-          })
-       }, 
-       FormatJson(FilterData, JsonData){
-        return JsonData.map((v) =>FilterData.map((j => {
-          if(j == "locals"){
-            return v["locals"]["name"]
-          }
-          if(j == "circuit"){
-            return v["circuit"]["name"]
-          }
-          if(j == "section"){
-            return v["section"]["name"]
-          }
-          
-          return v[j]
-        })))
-       }
        
     },
     mounted(){

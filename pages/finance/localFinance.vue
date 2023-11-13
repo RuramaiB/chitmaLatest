@@ -392,7 +392,7 @@ export default {
     }).then((res) =>
      {
       this.result = res.data
-      console.log(this.result)  
+      // console.log(this.result)  
       this.items = res.data.content
       this.pages = res.data.pageable
     }) .catch(error => {
@@ -441,6 +441,8 @@ export default {
           }).then((response) =>{
           const data = response.data;
           alert("Local Finance Record added successfully.")
+          this.closeAddModal()
+          reloadNuxtApp()
           this.response = data;
           console.log(response);
         })
@@ -492,6 +494,8 @@ export default {
           }).then((response) =>{
           const data = response.data;
           alert("Local Finance Record updated successfully.")
+          this.closeEditModal()
+          reloadNuxtApp()
           this.response = data;
           console.log(response);
         })
@@ -513,6 +517,7 @@ export default {
           const data = response.data;
           alert("Local Finance Record deleted successfully.")
           this.closeDeleteModal()
+            reloadNuxtApp()
           this.response = data;
           console.log(response);
         })

@@ -48,13 +48,18 @@
             
         </div>
         </div> 
-        <div class="flex justify-between px-5">
+        <!-- <div class="flex justify-between px-5">
             <NuxtLink to="/finance/financeDescription"> 
             Finance Description
             </NuxtLink>
             <NuxtLink to="/finance/financeDescriptionWithTargets"> 
             Finance Description with Targets
             </NuxtLink>
+        </div> -->
+        <div class="flex justify-center px-5">
+                <NuxtLink class="m-3" to="/finance/financeDescription">Finance Description</NuxtLink>
+                <NuxtLink class="m-3" to="/finance/financeDescriptionWithTargets">Finance Description with Targets</NuxtLink>
+                
         </div>
        
     <slot/>  

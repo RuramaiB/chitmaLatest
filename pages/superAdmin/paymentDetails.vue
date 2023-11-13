@@ -3,7 +3,7 @@
       <div class="flex px-10 py-1 bg-green-900">    
         <div class="flex flex-rows w-full justify-between">
           <div class="pl-1 py-2">
-            <h1 class="text-xl font-semibold text-white">Locals</h1>
+            <h1 class="text-xl font-semibold text-white">Payment Details</h1>
           </div>
           <!-- Right content -->
           <div class="relative my-1 z-10">
@@ -62,10 +62,16 @@
                                   Local
                                 </th>
                                 <th scope="col" class="px-6 py-3">
-                                  Location
+                                  Payment Method
                                 </th>
                                 <th scope="col" class="px-6 py-3">
-                                    Prefix
+                                    Currency
+                                  </th>
+                                  <th scope="col" class="px-6 py-3">
+                                  Payment ID
+                                </th>
+                                <th scope="col" class="px-6 py-3">
+                                    Payment Key
                                   </th>
                                 <th scope="col" class="px-6 py-3">
                                     
@@ -76,24 +82,31 @@
                         <tbody>
                             <tr v-for="item in filteredItems" :key="item.id" class="bg-white border-b dark:bg-gray-900 dark:border-gray-700">
                               <td class="px-6 py-4">{{ item.id }}</td>
-                              <td class="px-6 py-4">{{ item.name }}</td>
-                              <td class="px-6 py-4">{{ item.location }}</td>
-                              <td class="px-6 py-4">{{ item.prefix }}</td>
+                              <td class="px-6 py-4">{{ item.local }}</td>
+                              <td class="px-6 py-4">{{ item.paymentMethod }}</td>
+                              <td class="px-6 py-4">{{ item.currency }}</td>
+                              <td class="px-6 py-4">{{ item.paymentId }}</td>
+                              <td class="px-6 py-4">{{ item.paymentKey }}</td>
                               <td class="px-3 py-4">
                                 <a href="#" class="font-medium text-green-500 dark:text-blue-500 hover:underline">
-                                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"  @click="getLocalByName(item.name)"  class="bi bi-pencil-square" viewBox="0 0 16 16"> <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/> <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z"/> </svg>
+                                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"  @click="getFinancialDetailByID(item.id)"  class="bi bi-pencil-square" viewBox="0 0 16 16"> <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/> <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z"/> </svg>
                                 </a >
                               </td>
                               <td class="pl-3 pr-4 py-4">
                                 <a href="#" class="font-medium text-yellow-500 dark:text-blue-500 hover:underline" >
-                                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"  @click="openDeleteModal(item.name)" class="bi bi-trash" viewBox="0 0 16 16"> <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z"/> <path fill-rule="evenodd" d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z"/> </svg>
+                                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"  @click="openDeleteModal(item.id)" class="bi bi-trash" viewBox="0 0 16 16"> <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z"/> <path fill-rule="evenodd" d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z"/> </svg>
                                 </a >
                               </td>
                             </tr>
                         </tbody>
                     </table>
+                    <!-- <div v-if="!loading" class="text-md text-white flex flex-row justify-end bg-blue-900 px-8 lg:w-full md:w-screen">
+                        
+                        <button class="p-3" @click="getAllPaymentDetails(pageNumber-1)"  v-for="pageNumber in this.result.totalPages" :key="pageNumber">
+                          {{ pageNumber }} 
+                        </button>
+                  </div> -->
                 </div>
-          
                   <!--  Add Modal -->
                   <div v-if="addModal" class="z-10 pt-36 backdrop-brightness-50 top-0 w-screen h-screen absolute inset-0 flex items-center justify-center">
                         <div class="bg-white rounded-lg shadow-md p-5 overflow-y-auto">
@@ -103,27 +116,41 @@
                             <button class="bg-red-500 text-white text-xl font-xl px-3 py-1 mt-4 rounded-md" @click="closeAddModal">X</button>
                           </div>
                           <p v-if="loading">Processing the payment request</p>
-                          <form  v-else @submit.prevent="addLocal()" class=" grid grid-cols-2 gap-12 bg-white shadow-md rounded px-8 py-6 mb-4">     
+                          <form  v-else @submit.prevent="addPaymentDetail()" class=" grid grid-cols-2 gap-12 bg-white shadow-md rounded px-8 py-6 mb-4">     
                             <!-- Local Name -->
                             <div class="mb-4">
                               <label class="block text-gray-700 text-sm font-bold mb-2" for="local">Local Name:</label>
                               <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" 
-                                id="local" type="text" v-model="loc.local" >
+                                id="local" type="text" v-model="payDetail.local" >
                                 <p v-if="this.errors.local" class="text-sm text-red-600 text-left mb-2">*{{this.errors.local}}</p>
                             </div>  
-                            <!-- Location -->
+                            <!-- Payment method -->
                             <div class="mb-4">
-                              <label class="block text-gray-700 text-sm font-bold mb-2" for="location">Location:</label>
+                              <label class="block text-gray-700 text-sm font-bold mb-2" for="location">Payment method:</label>
                               <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" 
-                                id="location" type="text" v-model="loc.location" >
-                                <p v-if="this.errors.location" class="text-sm text-red-600 text-left mb-2">*{{this.errors.location}}</p>
+                                id="location" type="text" v-model="payDetail.paymentMethod" >
+                                <p v-if="this.errors.paymentMethod" class="text-sm text-red-600 text-left mb-2">*{{this.errors.paymentMethod}}</p>
                             </div>  
-                             <!-- Prefix -->
+                             <!-- Currency -->
                              <div class="mb-4">
-                              <label class="block text-gray-700 text-sm font-bold mb-2" for="location">Prefix:</label>
+                              <label class="block text-gray-700 text-sm font-bold mb-2" for="location">Currency:</label>
                               <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" 
-                                id="location" type="text" v-model="loc.prefix" >
-                                <p v-if="this.errors.prefix" class="text-sm text-red-600 text-left mb-2">*{{this.errors.prefix}}</p>
+                                id="location" type="text" v-model="payDetail.currency" >
+                                <p v-if="this.errors.currency" class="text-sm text-red-600 text-left mb-2">*{{this.errors.currency}}</p>
+                            </div>
+                             <!-- Payment ID -->
+                             <div class="mb-4">
+                              <label class="block text-gray-700 text-sm font-bold mb-2" for="location">Payment ID:</label>
+                              <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" 
+                                id="location" type="text" v-model="payDetail.paymentId" >
+                                <p v-if="this.errors.paymentId" class="text-sm text-red-600 text-left mb-2">*{{this.errors.paymentId}}</p>
+                            </div>
+                             <!-- Payment key -->
+                             <div class="mb-4">
+                              <label class="block text-gray-700 text-sm font-bold mb-2" for="location">Payment Key:</label>
+                              <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" 
+                                id="location" type="text" v-model="payDetail.paymentKey" >
+                                <p v-if="this.errors.paymentKey" class="text-sm text-red-600 text-left mb-2">*{{this.errors.paymentKey}}</p>
                             </div>
                             <!-- Submit Button -->
                             <div class="ml-2">
@@ -141,26 +168,42 @@
                       <h2 class="text-2xl font-bold mb-4">{{ editModalHeading }}</h2>
                       <button class="bg-red-500 text-white text-xl font-xl px-3 py-1 mt-4 rounded-md" @click="closeEditModal">X</button>
                     </div>
-                    <form @submit.prevent="updateLocal(locs.name)" class=" grid grid-cols-2 gap-12 bg-white shadow-md rounded px-8 py-6 mb-4">     
-                      <!-- Local -->
-                      <div class="mb-4">
-                        <label class="block text-gray-700 text-sm font-bold mb-2" for="local">Local</label>
-                        <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" 
-                          id="local" type="text" v-model="locs.name" required>
-                      </div>  
-                      <!-- Location -->
-                      <div class="mb-4">
-                        <label class="block text-gray-700 text-sm font-bold mb-2" for="location">Location:</label>
-                        <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" 
-                          id="location" type="text" v-model="locs.location" required>
-                      </div>  
-                      <!-- Prefix -->
-                      <div class="mb-4">
-                        <label class="block text-gray-700 text-sm font-bold mb-2" for="location">Prefix:</label>
-                        <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" 
-                           id="location" type="text" v-model="locs.prefix" >
-                          <p v-if="this.errors.prefix" class="text-sm text-red-600 text-left mb-2">*{{this.errors.prefix}}</p>
-                      </div>
+                    <form @submit.prevent="updatePaymentDetail(paymentD.id)" class=" grid grid-cols-2 gap-12 bg-white shadow-md rounded px-8 py-6 mb-4">     
+                        <!-- Local Name -->
+                        <div class="mb-4">
+                              <label class="block text-gray-700 text-sm font-bold mb-2" for="local">Local Name:</label>
+                              <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" 
+                                id="local" type="text" v-model="paymentD.local" >
+                                <p v-if="this.errors.local" class="text-sm text-red-600 text-left mb-2">*{{this.errors.local}}</p>
+                            </div>  
+                            <!-- Payment method -->
+                            <div class="mb-4">
+                              <label class="block text-gray-700 text-sm font-bold mb-2" for="location">Payment method:</label>
+                              <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" 
+                                id="location" type="text" v-model="paymentD.paymentMethod" >
+                                <p v-if="this.errors.paymentMethod" class="text-sm text-red-600 text-left mb-2">*{{this.errors.paymentMethod}}</p>
+                            </div>  
+                             <!-- Currency -->
+                             <div class="mb-4">
+                              <label class="block text-gray-700 text-sm font-bold mb-2" for="location">Currency:</label>
+                              <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" 
+                                id="location" type="text" v-model="paymentD.currency" >
+                                <p v-if="this.errors.currency" class="text-sm text-red-600 text-left mb-2">*{{this.errors.currency}}</p>
+                            </div>
+                             <!-- Payment ID -->
+                             <div class="mb-4">
+                              <label class="block text-gray-700 text-sm font-bold mb-2" for="location">Payment ID:</label>
+                              <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" 
+                                id="location" type="text" v-model="paymentD.paymentId" >
+                                <p v-if="this.errors.paymentId" class="text-sm text-red-600 text-left mb-2">*{{this.errors.paymentId}}</p>
+                            </div>
+                             <!-- Payment key -->
+                             <div class="mb-4">
+                              <label class="block text-gray-700 text-sm font-bold mb-2" for="location">Payment Key:</label>
+                              <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" 
+                                id="location" type="text" v-model="paymentD.paymentKey" >
+                                <p v-if="this.errors.paymentKey" class="text-sm text-red-600 text-left mb-2">*{{this.errors.paymentKey}}</p>
+                            </div>
                       <!-- Submit Button -->
                       <div class="ml-2">
                         <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" 
@@ -197,7 +240,7 @@
         editModal: false,
         deleteModal: false,
         editModalHeading: 'Edit record',
-        addModalHeading: 'Add new local locs record',
+        addModalHeading: 'Add new payment details',
         loading:true,
         isOpen: false,
         person: '',
@@ -209,19 +252,9 @@
           local: '',
         }],
         errors: {},
-        loc: {
-          location: '',
-          circuit: [],
-          local: '',
-        },
-        locs:[],
-        items: [{
-          id: '',
-          location: '',
-          circuit: [],
-          local: '',
-      }],
-      locs:[]
+        payDetail: {},
+        paymentD:{},
+        items: [],
       };
     },
     computed: {
@@ -245,10 +278,9 @@
       },
     },
     methods:{
-      async getLocalByName(name){
+      async getFinancialDetailByID(id){
             this.loading = true;
-            const locName = name.replace('%20', '@');
-      const URL = `https://chitma.hushsoft.co.zw/api/local/getLocalPreachingPointByName/?preachingPoint=${locName}`;
+      const URL = `https://chitma.hushsoft.co.zw/api/paymentDetails/getPaymentDetailBy/${id}`;
       // const token = localStorage.token;
       await axios.get(URL,{
         headers: {'Content-Type': 'application/json',
@@ -256,9 +288,8 @@
             'Access-Control-Allow-Origin': '*'}
       }).then((res) =>
        {
-        this.locs = res.data
-        console.log(this.locs);
-        console.log("Information tatora baba.");
+        this.paymentD = res.data
+        // console.log(this.paymentD);
         this.editModal = true;
       }) .catch(error => {
         console.log(error.code)
@@ -267,18 +298,18 @@
   
       }).finally(() => this.loading = false);
       },
-      async getLocals(){
+      async getAllPaymentDetails(pageNumber){
       this.loading = true;
-     
-      const URL = "https://chitma.hushsoft.co.zw/api/local/getAllLocalPreachingPoints";
+      const URL = `https://chitma.hushsoft.co.zw/api/paymentDetails/getAllPaymentDetails/${pageNumber}`;
       await axios.get(URL,{
         headers: {'Content-Type': 'application/json',
             // Authorization : 'Bearer ' + token,
             'Access-Control-Allow-Origin': '*'}
       }).then((res) =>
        {
-        this.items = res.data;
-        console.log("Fetching Data Completed...");
+        this.result = res.data
+      this.items = res.data.content
+      this.pages = res.data.pageable
       }) .catch(error => {
         console.log(error.code)
         this.error=error.code;
@@ -286,23 +317,38 @@
   
       }).finally(() => this.loading = false);
       },
-      async addLocal(){
+      async addPaymentDetail(){
               this.errors = {};
-              if(!this.loc.location){
-                  this.errors.location = "Location is required";
-              }             
+              if(!this.payDetail.local){
+                  this.errors.local = "Local is required";
+              }   
+              if(!this.payDetail.paymentMethod){
+                  this.errors.paymentMethod = "Payment method is required";
+              } 
+              if(!this.payDetail.currency){
+                  this.errors.currency = "Currency is required";
+              } 
+              if(!this.payDetail.paymentId){
+                  this.errors.paymentId = "Payment ID is required";
+              } 
+              if(!this.payDetail.paymentKey){
+                  this.errors.paymentKey = "Payment Key is required";
+              }           
               if (Object.keys(this.errors).length === 0) {
           // make API call or submit form data here
           try{
-          await axios.post('https://chitma.hushsoft.co.zw/api/local',{
-            'localLocation': this.loc.location,  
-            'localName': this.loc.local,
+          await axios.post('https://chitma.hushsoft.co.zw/api/paymentDetails/addNewPaymentDetails',{
+            'paymentMethod': this.payDetail.paymentMethod,  
+            'paymentId': this.payDetail.paymentId,  
+            'paymentKey': this.payDetail.paymentKey,  
+            'currency': this.payDetail.currency,  
+            'local': this.payDetail.local,
           },{
               headers: {'Content-Type': 'application/json'},
               credentials: 'include'
             }).then((response) =>{
             const data = response.data;
-            alert("Local added successfully.")
+            alert("Payment detail added successfully.")
             this.closeAddModal()
             reloadNuxtApp()
             this.response = data;
@@ -313,31 +359,41 @@
           this.errors.failed = "Sorry, an error occured!";
           this.errors.ERR = err;
           }
-          console.log("Form submitted successfully");
         }
       },
-      async updateLocal(name){
+      async updatePaymentDetail(id){
               this.errors = {};
-              const locNames = name.replace('%20', '@');
-              if(!this.locs.location){
-                  this.errors.location = "Location is required";
-              }
-              if(!this.locs.name){
-                  this.errors.name = "Local is required";
+              if(!this.paymentD.local){
+                  this.errors.local = "Local is required";
+              }   
+              if(!this.paymentD.paymentMethod){
+                  this.errors.paymentMethod = "Payment method is required";
+              } 
+              if(!this.paymentD.currency){
+                  this.errors.currency = "Currency is required";
+              } 
+              if(!this.paymentD.paymentId){
+                  this.errors.paymentId = "Payment ID is required";
+              } 
+              if(!this.paymentD.paymentKey){
+                  this.errors.paymentKey = "Payment Key is required";
               }      
              
               if (Object.keys(this.errors).length === 0) {
           // make API call or submit form data here
           try{
-          await axios.put('https://chitma.hushsoft.co.zw/api/local/updateLocalByName/' + locNames,{
-            location: this.locs.location,  
-            name: this.locs.name,
+          await axios.put('https://chitma.hushsoft.co.zw/api/paymentDetails/updatePaymentDetails/' + id,{
+            'paymentMethod': this.paymentD.paymentMethod,  
+            'paymentId': this.paymentD.paymentId,  
+            'paymentKey': this.paymentD.paymentKey,  
+            'currency': this.paymentD.currency,  
+            'local': this.paymentD.local,
           },{
               headers: {'Content-Type': 'application/json'},
               credentials: 'include'
             }).then((response) =>{
             const data = response.data;
-            alert("Local updated successfully.")
+            alert("Payment detail updated successfully.")
             this.closeEditModal()
             reloadNuxtApp()
             this.response = data;
@@ -354,12 +410,12 @@
      async handleOption (_option) {
         if(_option == 'Yes'){
           try{
-          await axios.delete('https://chitma.hushsoft.co.zw/api/local/deleteLocalPreachingPointByName/' + this.name,{
+          await axios.delete('https://chitma.hushsoft.co.zw/api/paymentDetails/deletePaymentDetails/' + this.name,{
               headers: {'Content-Type': 'application/json'},
               credentials: 'include'
             }).then((response) =>{
             const data = response.data;
-            alert("Local Finance Record deleted successfully.")
+            alert("Payment Detail deleted successfully.")
             this.closeDeleteModal()
             reloadNuxtApp()
             this.response = data;
@@ -421,7 +477,7 @@
        
     },
     mounted(){
-      this.getLocals()
+      this.getAllPaymentDetails(0)
       this.getAdminInfo()
       
     }
