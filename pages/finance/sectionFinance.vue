@@ -73,6 +73,7 @@
                   <div>
                     <!-- Add Button -->
                     <button class="text-black border-2 border-blue-600 bg-white px-4 py-1 rounded-lg m-1" @click="openAddModal">Add</button>
+                    <button class="text-black border-2 border-blue-600 bg-white px-4 py-1 rounded-lg m-1" @click="exportToExcel">Export</button>
                                  
                     <!-- Modal -->
                     <div v-if="showAddModal" class="z-10 pt-5 backdrop-brightness-50 top-0 w-screen h-screen absolute inset-0 flex items-center justify-center">
@@ -208,7 +209,7 @@
                             <td class="px-4 py-4">{{ item.phoneNumber}}</td>
                             <td class="px-4 py-4">{{ item.currency}}</td>
                             <td class="px-4 py-4">{{ item.paymentMethod }}</td>
-                            <td class="px-4 py-4">{{ item.description }}</td>
+                            <td class="px-4 py-4">{{ item.financeDescription.description }}</td>
                             <td class="px-4 py-4">{{ item.amount }}</td>
                             <td class="px-3 py-4">
                                 <a href="#" class="font-medium text-green-500 dark:text-blue-500 hover:underline">
@@ -223,10 +224,11 @@
                           </tr>
                       </tbody>
                   </table>
-                  <div v-if="!loading" class="text-md text-white flex justify-end bg-blue-900 px-8  w-fit">
-                        <button class="p-3" @click="fetchSectionFinance(pageNumber)"  v-for="pageNumber in this.result.totalPages" :key="pageNumber">
+                  <div v-if="!loading" class="text-md text-white flex flex-row justify-end bg-blue-900 px-8 lg:w-full md:w-screen">
+                        
+                        <button class="p-3" @click="fetchSectionFinance(pageNumber)"   v-for="pageNumber in this.result.totalPages" :key="pageNumber">
                           {{ pageNumber }} 
-                        </button>                        
+                        </button>
                   </div>
               </div>
               <div v-if="editModal" class="z-10 pt-5 backdrop-brightness-50 top-0 w-screen h-screen absolute inset-0 flex items-center justify-center">
@@ -320,6 +322,7 @@
 
 <script>
 import axios from 'axios'
+import * as XLSX from 'xlsx/xlsx.mjs';
 import { encryptData, decryptData } from '@/encryption';
 export default {
   data() {
@@ -393,7 +396,6 @@ export default {
       this.result = res.data
       this.items = res.data.content
       this.pages = res.data.pageable
-      console.log("Fetching Data Completed...");
     }) .catch(error => {
       console.log(error.code)
       this.error=error.code;
@@ -412,8 +414,6 @@ export default {
     }).then((res) =>
      {
       this.finance = res.data
-      console.log(this.finance);
-      console.log("Information tatora baba.");
       this.editModal = true;
     }) .catch(error => {
       console.log(error.code)
@@ -475,7 +475,6 @@ export default {
         this.errors.failed = "Sorry, an error occured!";
         this.errors.ERR = err;
         }
-        console.log("Form submitted successfully");
       }
     },
     async handleOption(_option) {
@@ -490,14 +489,12 @@ export default {
           this.closeDeleteModal()
             reloadNuxtApp()
           this.response = data;
-          console.log(response);
         })
         }catch(err){
         console.log("Error:",err)
         this.errors.failed = "Sorry, an error occured!";
         this.errors.ERR = err;
         }
-        console.log("Form submitted successfully");
     }
     else if(_option = 'no'){
       this.FID = ''
@@ -558,7 +555,6 @@ export default {
         this.errors.failed = "Sorry, an error occured!";
         this.errors.ERR = err;
         }
-        console.log("Form submitted successfully");
       }
     },
     async getAllFinanceDescriptions(){
@@ -574,8 +570,6 @@ export default {
     }).then((res) =>
      {
       this.financeDescription = res.data;
-      console.log(this.financeDescription)
-      console.log("Fetching Data Completed...");
     }) .catch(error => {
       console.log(error.code)
       this.error=error.code;
@@ -587,7 +581,6 @@ export default {
       this.loading = true;
       const mN = localStorage.getItem('mN');
       const mbnD = decryptData(mN);
-      console.log("Munhu uyu",mbnD)
       const URL = `https://chitma.hushsoft.co.zw/api/api/v1/auth/getUserByMembershipNumber/${mbnD}`;
       await axios.get(URL,{
         headers: {'Content-Type': 'application/json',
@@ -604,6 +597,54 @@ export default {
         this.errored = true
   
       }).finally(() => this.loading = false);
+      },
+      async exportToExcel() {
+        try {
+          const pp = localStorage.getItem('pp');
+          const local = decryptData(pp);
+
+          const response = await axios.get(`https://chitma.hushsoft.co.zw/api/sectionFinance/getSectionFinanceBy/${local}`);
+          const users = response.data;
+          const columnNames = ['ID', 'Date of Payment', 'Name', 'Surname', 'Membership Number', 'Section','Phone Number', 'Payment Method','Currency', 'Description', 'Amount']; // Replace with your actual column names
+          const columnValues = users.map((payee) => [
+           payee.financeID,
+           payee.dateOfPayment,
+           payee.user.firstname,
+           payee.user.lastname,
+           payee.membershipNumber,
+           payee.section.name,
+           payee.phoneNumber,
+           payee.paymentMethod,
+           payee.currency,
+           payee.financeDescription.description,
+           payee.amount,
+          ]);
+
+          const worksheet = XLSX.utils.aoa_to_sheet([columnNames, ...columnValues]);
+          const workbook = XLSX.utils.book_new();
+          XLSX.utils.book_append_sheet(workbook, worksheet, 'Section Finance Records');
+
+          const excelBuffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
+          const blob = new Blob([excelBuffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+          const fileName = 'sectionFinanceRecords.xlsx';
+
+          if (navigator.msSaveBlob) {
+            navigator.msSaveBlob(blob, fileName);
+          } else {
+            const link = document.createElement('a');
+            if (link.download !== undefined) {
+              const url = URL.createObjectURL(blob);
+              link.setAttribute('href', url);
+              link.setAttribute('download', fileName);
+              link.style.visibility = 'hidden';
+              document.body.appendChild(link);
+              link.click();
+              document.body.removeChild(link);
+            }
+          }
+        } catch (error) {
+          console.error(error);
+        }
       },
     openAddModal() {
         this.showAddModal = true;

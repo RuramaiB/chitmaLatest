@@ -303,9 +303,6 @@ export default {
       this.items = res.data.content
       this.pages = res.data.pageable
       this.totalPages = res.data.totalPages
-      console.log(this.pages)
-      console.log(this.items)
-      console.log("Fetching Data Completed...");
     }) .catch(error => {
       console.log(error.code)
       this.error=error.code;

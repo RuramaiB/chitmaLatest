@@ -133,8 +133,6 @@ import { encryptData, decryptData } from '@/encryption';
         this.adminInfo = res.data
         this.user = this.adminInfo
         this.person = this.adminInfo.firstname
-        console.log("Admin info", this.adminInfo)
-        console.log("Fetching Data Completed...");
       }) .catch(error => {
         console.log(error.code)
         this.error=error.code;
@@ -168,14 +166,12 @@ import { encryptData, decryptData } from '@/encryption';
           const data = response.data;
           alert("Admin updated successfully.")
           this.response = data;
-          console.log(response);
         })
         }catch(err){
         console.log("Error:",err)
         this.errors.failed = "Sorry, an error occured!";
         this.errors.ERR = err;
         }
-        console.log("Form submitted successfully");
       }
     },
     },

@@ -170,8 +170,6 @@
       }).then((res) =>
        {
         this.locs = res.data
-        console.log(this.locs);
-        console.log("Information tatora baba.");
         this.editModal = true;
       }) .catch(error => {
         console.log(error.code)
@@ -192,7 +190,6 @@
       }).then((res) =>
        {
         this.items = res.data;
-        console.log("Fetching Data Completed...", this.items);
       }) .catch(error => {
         console.log(error.code)
         this.error=error.code;
@@ -229,14 +226,12 @@
             const data = response.data;
             alert("Finance Description added successfully.")
             this.response = data;
-            console.log(response);
           })
           }catch(err){
           console.log("Error:",err)
           this.errors.failed = "Sorry, an error occured!";
           this.errors.ERR = err;
           }
-          console.log("Form submitted successfully");
         }
       },
      async handleOption (_option) {
@@ -250,14 +245,12 @@
             alert("Local Finance Record deleted successfully.")
             this.closeDeleteModal()
             this.response = data;
-            console.log(response);
           })
           }catch(err){
           console.log("Error:",err)
           this.errors.failed = "Sorry, an error occured!";
           this.errors.ERR = err;
           }
-          console.log("Form submitted successfully");
       }
       else if(_option = 'no'){
         this.name = ''

@@ -140,7 +140,7 @@
         <div v-if="this.items> 0" v-for="item in this.items">
           <div class="flex justify-between">
             <div class="grid-grid-cols-1">
-            <h1 class="text-lg font-semibold">{{item.madeBy}}</h1>
+            <h1  class="text-lg font-semibold">{{item.madeBy}}</h1>
             <div class="flex">
               <h1 class="text-sm font-semibold opacity-90 mr-1">{{ item.paymentType }} .</h1>
               <h1 class="text-sm font-semibold opacity-80">{{ item.financeDescription }}</h1>
@@ -175,7 +175,6 @@ export default {
       this.loading = true;
       const mN = localStorage.getItem('mN');
       const mbnD = decryptData(mN);
-      console.log("Munhu uyu",mbnD)
       const URL = `https://chitma.hushsoft.co.zw/api/api/v1/auth/getUserByMembershipNumber/${mbnD}`;
       await axios.get(URL,{
         headers: {'Content-Type': 'application/json',
@@ -205,7 +204,6 @@ export default {
       }).then((res) =>
        {
         this.items = res.data;
-        console.log("these are the items: ", this.items)
       }) .catch(error => {
         console.log(error.code)
         this.error=error.code;

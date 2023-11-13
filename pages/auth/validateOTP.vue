@@ -76,7 +76,7 @@
   
   <style>
   .body {
-      background: url("../assets/banner.jpg");
+      background: url("@/assets/banner.jpg");
       background-size: cover;
       background-repeat: none;
       display: flex;

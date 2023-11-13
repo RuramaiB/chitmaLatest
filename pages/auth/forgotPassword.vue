@@ -58,7 +58,7 @@
              alert("Check your phone sms")
              this.response = data;
              console.log(response);
-             this.$router.push('/auth/validateOTP')
+             this.$router.push('@/auth/validateOTP')
            })
    
    }catch(err){
@@ -66,7 +66,6 @@
    this.errors.failed = "Sorry, an error occured!";
    this.errors.ERR = err;
    }
-           console.log("Form submitted successfully");
          }
            }
        }
@@ -75,7 +74,7 @@
   
   <style>
   .body {
-      background: url("../../assets/banner.jpg");
+      background: url("@/assets/banner.jpg");
       background-size: cover;
       background-repeat: none;
       display: flex;

@@ -223,8 +223,6 @@
       }).then((res) =>
        {
         this.account = res.data
-        console.log(this.account);
-        console.log("Information tatora baba.");
         this.editModal = true;
       }) .catch(error => {
         console.log(error.code)
@@ -251,9 +249,6 @@
         this.result = res.data
         this.items = res.data.content
         this.pages = res.data.pageable
-        console.log(this.pages)
-        console.log("these are the items",this.items)
-        console.log("Fetching Data Completed...");
       }) .catch(error => {
         console.log(error.code)
         this.error=error.code;
@@ -265,7 +260,6 @@
       this.loading = true;
       const mN = localStorage.getItem('mN');
       const mbnD = decryptData(mN);
-      console.log("Munhu uyu",mbnD)
       const URL = `https://chitma.hushsoft.co.zw/api/api/v1/auth/getUserByMembershipNumber/${mbnD}`;
       await axios.get(URL,{
         headers: {'Content-Type': 'application/json',

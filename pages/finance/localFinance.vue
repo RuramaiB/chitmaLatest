@@ -65,7 +65,8 @@
                   <div>
                     <!-- Add Button -->
                     <button class="text-black border-2 mt-10 border-blue-600 bg-white px-4 py-1 rounded-lg m-1" @click="openAddModal">Add</button>
-                
+                    <button class="text-black border-2 mt-10 border-blue-600 bg-white px-4 py-1 rounded-lg m-1" @click="exportToExcel">Export</button>
+
                     <!-- Modal -->
                     <div v-if="addModal" class="z-10 pt-5 backdrop-brightness-50 top-0 w-screen h-screen absolute inset-0 flex items-center justify-center">
                       <div class="bg-white rounded-lg shadow-md p-5 overflow-y-auto">
@@ -163,6 +164,9 @@
                                 Payment Method
                               </th>
                               <th scope="col" class="px-6 py-3">
+                                Currency
+                              </th>
+                              <th scope="col" class="px-6 py-3">
                                 Description
                               </th>
                               <th scope="col" class="px-6 py-3">
@@ -185,6 +189,7 @@
                             <td class="px-6 py-4">{{ item.membershipNumber }}</td>
                             <td class="px-6 py-4">{{ item.phoneNumber }}</td>
                             <td class="px-6 py-4">{{ item.paymentMethod }}</td>
+                            <td class="px-6 py-4">{{ item.currency }}</td>
                             <td class="px-6 py-4">{{ item.description }}</td>
                             <td class="px-6 py-4">{{ item.amount }}</td>
                             <td class="px-3 py-4">
@@ -284,6 +289,7 @@
 
 <script>
 import axios from 'axios'
+import * as XLSX from 'xlsx/xlsx.mjs';
 import { encryptData, decryptData } from '@/encryption';
 export default {
   data() {
@@ -369,8 +375,6 @@ export default {
     }).then((res) =>
      {
       this.finance = res.data
-      console.log(this.finance);
-      console.log("Information tatora baba.");
       this.editModal = true;
     }) .catch(error => {
       console.log(error.code)
@@ -392,7 +396,6 @@ export default {
     }).then((res) =>
      {
       this.result = res.data
-      // console.log(this.result)  
       this.items = res.data.content
       this.pages = res.data.pageable
     }) .catch(error => {
@@ -444,14 +447,12 @@ export default {
           this.closeAddModal()
           reloadNuxtApp()
           this.response = data;
-          console.log(response);
         })
         }catch(err){
         console.log("Error:",err)
         this.errors.failed = "Sorry, an error occured!";
         this.errors.ERR = err;
         }
-        console.log("Form submitted successfully");
       }
     },
     async updateLocalFinanceSubmit(id){
@@ -497,14 +498,12 @@ export default {
           this.closeEditModal()
           reloadNuxtApp()
           this.response = data;
-          console.log(response);
         })
         }catch(err){
         console.log("Error:",err)
         this.errors.failed = "Sorry, an error occured!";
         this.errors.ERR = err;
         }
-        console.log("Form submitted successfully");
       }
     },
    async handleOption (_option) {
@@ -519,14 +518,12 @@ export default {
           this.closeDeleteModal()
             reloadNuxtApp()
           this.response = data;
-          console.log(response);
         })
         }catch(err){
         console.log("Error:",err)
         this.errors.failed = "Sorry, an error occured!";
         this.errors.ERR = err;
         }
-        console.log("Form submitted successfully");
     }
     else if(_option = 'no'){
       this.FID = ''
@@ -545,8 +542,6 @@ export default {
     }).then((res) =>
      {
       this.financeDescription = res.data;
-      console.log(this.financeDescription)
-      console.log("Fetching Data Completed...");
     }) .catch(error => {
       console.log(error.code)
       this.error=error.code;
@@ -558,7 +553,6 @@ export default {
       this.loading = true;
       const mN = localStorage.getItem('mN');
       const mbnD = decryptData(mN);
-      console.log("Munhu uyu",mbnD)
       const URL = `https://chitma.hushsoft.co.zw/api/api/v1/auth/getUserByMembershipNumber/${mbnD}`;
       await axios.get(URL,{
         headers: {'Content-Type': 'application/json',
@@ -575,6 +569,53 @@ export default {
         this.errored = true
   
       }).finally(() => this.loading = false);
+      },
+      async exportToExcel() {
+        try {
+          const pp = localStorage.getItem('pp');
+          const local = decryptData(pp);
+
+          const response = await axios.get(`https://chitma.hushsoft.co.zw/api/localFinance/getLocalFinanceBy/${local}`);
+          const users = response.data;
+          const columnNames = ['ID', 'Date of Payment', 'Name', 'Surname', 'Membership Number', 'Phone Number', 'Payment Method','Currency', 'Description', 'Amount']; // Replace with your actual column names
+          const columnValues = users.map((payee) => [
+           payee.id,
+           payee.dateOfPayment,
+           payee.user.firstname,
+           payee.user.lastname,
+           payee.membershipNumber,
+           payee.phoneNumber,
+           payee.paymentMethod,
+           payee.currency,
+           payee.description,
+           payee.amount,
+          ]);
+
+          const worksheet = XLSX.utils.aoa_to_sheet([columnNames, ...columnValues]);
+          const workbook = XLSX.utils.book_new();
+          XLSX.utils.book_append_sheet(workbook, worksheet, 'Local Finance Records');
+
+          const excelBuffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
+          const blob = new Blob([excelBuffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+          const fileName = 'localFinanceRecords.xlsx';
+
+          if (navigator.msSaveBlob) {
+            navigator.msSaveBlob(blob, fileName);
+          } else {
+            const link = document.createElement('a');
+            if (link.download !== undefined) {
+              const url = URL.createObjectURL(blob);
+              link.setAttribute('href', url);
+              link.setAttribute('download', fileName);
+              link.style.visibility = 'hidden';
+              document.body.appendChild(link);
+              link.click();
+              document.body.removeChild(link);
+            }
+          }
+        } catch (error) {
+          console.error(error);
+        }
       },
       openAddModal() {
         this.addModal = true;

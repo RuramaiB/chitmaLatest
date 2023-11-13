@@ -51,7 +51,7 @@
     <div class="mt-1 p-4 gap-3 lg:w-full md:w-screen">
       <div class="bg-white rounded shadow-sm">
         <button class="text-black border-2 border-green-600 bg-white px-4 py-1 rounded-lg m-1" @click="openAddModal">Add</button>
-        <button class="text-black border-2 border-green-600 bg-white px-4 py-1 rounded-lg m-1" @click="exportExcel">Export</button>
+        <button class="text-black border-2 border-green-600 bg-white px-4 py-1 rounded-lg m-1" @click="exportToExcel">Export</button>
       </div>
       <div class="relative overflow-x-auto mb-5 shadow-md sm:rounded-lg">
                   <table class="lg:w-full md:w-screen text-sm text-left text-gray-500 dark:text-gray-400">
@@ -374,6 +374,7 @@
 <script>
 import axios from 'axios'
 import { encryptData, decryptData } from '@/encryption';
+import * as XLSX from 'xlsx/xlsx.mjs';
 export default {
   data() {
     return {
@@ -469,8 +470,6 @@ export default {
     }).then((res) =>
      {
       this.account = res.data
-      console.log(this.account);
-      console.log("Information tatora baba.");
       this.editModal = true;
     }) .catch(error => {
       console.log(error.code)
@@ -572,9 +571,6 @@ export default {
       this.result = res.data
       this.items = res.data.content
       this.pages = res.data.pageable
-      console.log(this.pages)
-      console.log(this.items)
-      console.log("Fetching Data Completed...");
     }) .catch(error => {
       console.log(error.code)
       this.error=error.code;
@@ -684,8 +680,6 @@ export default {
     }).then((res) =>
      {
       this.sections = res.data;
-      console.log(this.sections)
-      console.log("Fetching Data Completed...");
     }) .catch(error => {
       console.log(error.code)
       this.error=error.code;
@@ -697,7 +691,6 @@ export default {
       this.loading = true;
       const mN = localStorage.getItem('mN');
       const mbnD = decryptData(mN);
-      console.log("Munhu uyu",mbnD)
       const URL = `https://chitma.hushsoft.co.zw/api/api/v1/auth/getUserByMembershipNumber/${mbnD}`;
       await axios.get(URL,{
         headers: {'Content-Type': 'application/json',
@@ -714,6 +707,54 @@ export default {
         this.errored = true
   
       }).finally(() => this.loading = false);
+    },
+    async exportToExcel() {
+        try {
+          const pp = localStorage.getItem('pp');
+          const local = decryptData(pp);
+
+          const response = await axios.get(`https://chitma.hushsoft.co.zw/api/api/v1/auth/getAllUsersBy/${local}`);
+          const users = response.data;
+          const columnNames = ['ID', 'MembersipNumber', 'First Name', 'Last Name', 'Gender', 'Date of Birth', 'Phone Number', 'Organisation', 'Membership Status', 'Local', 'Section']; // Replace with your actual column names
+          const columnValues = users.map((accUser) => [
+           accUser.id,
+           accUser.membershipNumber,
+           accUser.firstname,
+           accUser.lastname,
+           accUser.gender,
+           accUser.dateOfBirth,
+           accUser.phoneNumber,
+           accUser.organisation,
+           accUser.membershipStatus,
+           accUser.locals.name,
+           accUser.section.name
+          ]);
+
+          const worksheet = XLSX.utils.aoa_to_sheet([columnNames, ...columnValues]);
+          const workbook = XLSX.utils.book_new();
+          XLSX.utils.book_append_sheet(workbook, worksheet, 'Users');
+
+          const excelBuffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
+          const blob = new Blob([excelBuffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+          const fileName = 'users.xlsx';
+
+          if (navigator.msSaveBlob) {
+            navigator.msSaveBlob(blob, fileName);
+          } else {
+            const link = document.createElement('a');
+            if (link.download !== undefined) {
+              const url = URL.createObjectURL(blob);
+              link.setAttribute('href', url);
+              link.setAttribute('download', fileName);
+              link.style.visibility = 'hidden';
+              document.body.appendChild(link);
+              link.click();
+              document.body.removeChild(link);
+            }
+          }
+        } catch (error) {
+          console.error(error);
+        }
       },
       openAddModal() {
         this.addModal = true;
@@ -734,6 +775,7 @@ export default {
       closeDeleteModal() {
         this.deleteModal = false;
       },
+
      
   },
   mounted(){

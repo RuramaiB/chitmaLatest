@@ -90,9 +90,6 @@
                         </button>
                   </div>
               </div>
-                  <!-- Floating Download Button -->
-                  <try/>
-                  <!-- End of Floating button -->
                 <!--  Add Modal -->
                 <div v-if="addModal" class="z-20 pt-36 backdrop-brightness-50 top-0 w-screen h-screen absolute inset-0 flex items-center justify-center">
                       <div class="bg-white rounded-lg shadow-md p-5 overflow-y-auto">
@@ -174,7 +171,7 @@
 
 <script>
 import axios from 'axios'
-// import XLSX from 'xlsx';
+import * as XLSX from 'xlsx/xlsx.mjs';
 import { encryptData, decryptData } from '@/encryption';
 export default {
   data() {
@@ -273,9 +270,6 @@ export default {
       this.result = res.data
       this.items = res.data.content
       this.pages = res.data.pageable
-      console.log(this.pages)
-      console.log(this.items)
-      console.log("Fetching Data Completed...");
     }) .catch(error => {
       console.log(error.code)
       this.error=error.code;
@@ -346,7 +340,6 @@ export default {
       this.loading = true;
       const mN = localStorage.getItem('mN');
       const mbnD = decryptData(mN);
-      console.log("Munhu uyu",mbnD)
       const URL = `https://chitma.hushsoft.co.zw/api/api/v1/auth/getUserByMembershipNumber/${mbnD}`;
       await axios.get(URL,{
         headers: {'Content-Type': 'application/json',
@@ -364,38 +357,46 @@ export default {
   
       }).finally(() => this.loading = false);
       },
-    // async exportToExcel() {
-    //   try {
-    //     const pp = localStorage.getItem('pp');
-    //     const local = decryptData(pp);
-    //     const response = await axios.get(`https://chitma.hushsoft.co.zw/api/sections/getAllSections/${local}/0`);
-    //     const sections = response.data;
+      async exportToExcel() {
+        try {
+          const pp = localStorage.getItem('pp');
+          const local = decryptData(pp);
 
-    //     const worksheet = XLSX.utils.json_to_sheet(sections);
-    //     const workbook = XLSX.utils.book_new();
-    //     XLSX.utils.book_append_sheet(workbook, worksheet, 'Sections');
-    //     const excelBuffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
-    //     const blob = new Blob([excelBuffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
-    //     const fileName = 'sections.xlsx';
-    //     if (navigator.msSaveBlob) {
-    //       navigator.msSaveBlob(blob, fileName);
-    //     } else {
-    //       const link = document.createElement('a');
-    //       if (link.download !== undefined) {
-    //         const url = URL.createObjectURL(blob);
-    //         link.setAttribute('href', url);
-    //         link.setAttribute('download', fileName);
-    //         link.style.visibility = 'hidden';
-    //         document.body.appendChild(link);
-    //         link.click();
-    //         document.body.removeChild(link);
-    //       }
-    //     }
-    //   } catch (error) {
-    //     console.error(error);
-    //   }
-    // },
+          const response = await axios.get(`https://chitma.hushsoft.co.zw/api/sections/getAllSection/${local}`);
+          const sections = response.data;
+          const columnNames = ['ID', 'Section', 'Local']; // Replace with your actual column names
+          const columnValues = sections.map((section) => [
+            section.id,
+            section.name,
+            section.locals.name,
+          ]);
 
+          const worksheet = XLSX.utils.aoa_to_sheet([columnNames, ...columnValues]);
+          const workbook = XLSX.utils.book_new();
+          XLSX.utils.book_append_sheet(workbook, worksheet, 'Sections');
+
+          const excelBuffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
+          const blob = new Blob([excelBuffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+          const fileName = 'sections.xlsx';
+
+          if (navigator.msSaveBlob) {
+            navigator.msSaveBlob(blob, fileName);
+          } else {
+            const link = document.createElement('a');
+            if (link.download !== undefined) {
+              const url = URL.createObjectURL(blob);
+              link.setAttribute('href', url);
+              link.setAttribute('download', fileName);
+              link.style.visibility = 'hidden';
+              document.body.appendChild(link);
+              link.click();
+              document.body.removeChild(link);
+            }
+          }
+        } catch (error) {
+          console.error(error);
+        }
+      },
       openAddModal() {
         this.addModal = true;
       },
