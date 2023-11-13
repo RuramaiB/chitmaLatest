@@ -137,7 +137,7 @@
         </div>
         
         <hr class="w-full border-gray-300 my-2 opacity-10">
-        <div v-for="item in this.items">
+        <div v-if="this.items> 0" v-for="item in this.items">
           <div class="flex justify-between">
             <div class="grid-grid-cols-1">
             <h1 class="text-lg font-semibold">{{item.madeBy}}</h1>
