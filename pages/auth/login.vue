@@ -84,7 +84,7 @@
                 this.success="";
                 this.success = "Login Sucessful...";
               if(this.role === "[Admin]"){
-                  alert("Welcome To UMC Finance Admin Dashboard.")
+                  alert("Welcome To UMC Admin Dashboard.")
                   this.$router.push('/admin/')
               }
               else if(this.role === "[Finance]"){

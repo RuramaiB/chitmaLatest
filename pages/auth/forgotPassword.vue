@@ -55,10 +55,10 @@
                credentials: 'include'
              }).then((response) =>{
              const data = response.data;
-             alert("Check your phone sms")
+             alert("Check your phone SMS.")
              this.response = data;
              console.log(response);
-             this.$router.push('@/auth/validateOTP')
+             this.$router.push('/auth/validateOTP')
            })
    
    }catch(err){

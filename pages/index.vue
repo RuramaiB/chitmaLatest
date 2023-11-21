@@ -16,7 +16,7 @@
       </div>
     </nav>
     <div class="bg-cover">
-      <img src="./../assets/banner.jpg" alt="UMC" class="z-0 w-full h-screen bg-cover lg:w-screen">
+      <img lazy="true" src="./../assets/banner.jpg" alt="UMC" class="z-0 w-full h-screen bg-cover lg:w-screen">
       <!-- <div class="z-0 absolute top-0 left-0 w-full h-screen bg-black opacity-25">
         
       </div> -->

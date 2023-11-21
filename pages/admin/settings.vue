@@ -165,6 +165,7 @@ import { encryptData, decryptData } from '@/encryption';
           }).then((response) =>{
           const data = response.data;
           alert("Admin updated successfully.")
+          reloadNuxtApp()
           this.response = data;
         })
         }catch(err){

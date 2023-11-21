@@ -3,7 +3,7 @@
         <div class="flex px-10 py-1 bg-blue-900">    
         <div class="flex flex-rows w-full justify-between">
             <div class="pl-1 py-2">
-            <h1 class="text-xl font-semibold text-white">Finance Categories</h1>
+            <h1 class="text-xl font-semibold text-white">Finance Description</h1>
             </div>
             <!-- Right content -->
             <div class="relative my-1 z-10">

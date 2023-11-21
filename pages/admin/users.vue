@@ -207,6 +207,7 @@
                        <div class="mb-4">
                         <label class="block text-gray-700 text-sm font-bold mb-2" for="section">Section:</label>
                             <select v-model="users.section" id="sectionFilter" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+                              <option value="" disabled>Select section</option>
                               <option v-for="sec in sectionsList" :value="sec">{{ sec }}</option>
                             </select>
                             <p v-if="this.errors.section" class="text-sm text-red-600 text-left mb-2">*{{this.errors.section}}</p>
@@ -226,8 +227,8 @@
                               id="role" v-model="users.role" >
                               <option value="" disabled>Select Role</option>
                               <option value="User">User</option>
-                              <option value="Finance">Finance</option>
-                              <option value="Admin">Admin</option>
+                              <!-- <option value="Finance">Finance</option> -->
+                              <!-- <option value="Admin">Admin</option> -->
                             </select>
                             <p v-if="this.errors.role" class="text-sm text-red-600 text-left mb-2">*{{this.errors.role}}</p>
                           </div> 
@@ -343,7 +344,7 @@
                               <option value="" disabled>Select Role</option>
                               <option value="User">User</option>
                               <option value="Finance">Finance</option>
-                              <option value="Admin">Admin</option>
+                              <!-- <option value="Admin">Admin</option> -->
                             </select>
                             <p v-if="this.errors.role" class="text-sm text-red-600 text-left mb-2">*{{this.errors.role}}</p>
                           </div> 

@@ -492,7 +492,7 @@ export default {
       }
   },
   async handleOption (_option) {
-      if(_option = 'yes'){
+      if(_option == 'yes'){
         try{
         await axios.delete('https://chitma.hushsoft.co.zw/api/organisationsFinance/deleteOrganisationsFinance/' + this.FID,{
             headers: {'Content-Type': 'application/json'},

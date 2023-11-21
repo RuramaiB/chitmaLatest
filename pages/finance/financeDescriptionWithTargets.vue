@@ -66,16 +66,14 @@
                         </div>  
                           <!-- KickOff Date -->
                           <div class="mb-4">
-                          <label class="block text-gray-700 text-sm font-bold mb-2" for="description">Grand Target:</label>
+                          <label class="block text-gray-700 text-sm font-bold mb-2" for="description">Kick Off Date:</label>
                           <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" 
-                            id="description" type="text" v-model="loc.kickOffDate" >
+                            id="description" type="date" v-model="loc.kickOffDate" >
                             <p v-if="this.errors.kickOffDate" class="text-sm text-red-600 text-left mb-2">*{{this.errors.kickOffDate}}</p>
                         </div> 
-                             
-                       
                         <!-- Submit Button -->
                         <div class="ml-2">
-                          <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" 
+                          <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" 
                           >Submit</button>
                         </div>
                       </form>        
@@ -198,22 +196,12 @@
       }).finally(() => this.loading = false);
       },
       async addFinanceDescription(){
-              this.errors = {};
-              if(!this.loc.description){
-                  this.errors.description = "Description is required";
-              } 
-              if(!this.loc.kickOffDate){
-                  this.errors.kickOffDate = "Kick-Off Date is required";
-              } 
-              if(!this.loc.grandTarget){
-                  this.errors.grandTarget = "Grand Target is required";
-              } 
-             
+              this.errors = {};             
               if (Object.keys(this.errors).length === 0) {
           // make API call or submit form data here
           try{
             const pp = localStorage.getItem('pp');
-      const local = decryptData(pp);
+            const local = decryptData(pp);
           await axios.post('https://chitma.hushsoft.co.zw/api/financeDescription/addNewFinanceDescriptions',{
             'description': this.loc.description,  
             'target': this.loc.target,
@@ -225,6 +213,7 @@
             }).then((response) =>{
             const data = response.data;
             alert("Finance Description added successfully.")
+            reloadNuxtApp()
             this.response = data;
           })
           }catch(err){

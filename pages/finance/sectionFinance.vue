@@ -92,13 +92,14 @@
                               id="membershipNumber" type="text" v-model="payments.membershipNumber">
                               <p v-if="this.errors.membershipNumber" class="text-sm text-red-600 text-left mb-2">*{{this.errors.membershipNumber}}</p>
                           </div>
-                          <!-- Section -->
-                          <div class="mb-4">
-                            <label class="block text-gray-700 text-sm font-bold mb-2" for="section">Section:</label>
-                            <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" 
-                              id="section" type="text" v-model="payments.section">
-                              <p v-if="this.errors.section" class="text-sm text-red-600 text-left mb-2">*{{this.errors.section}}</p>
-                          </div>
+                     <!-- Section
+                     <div class="mb-4">
+                        <label class="block text-gray-700 text-sm font-bold mb-2" for="section">Section:</label>
+                            <select v-model="payments.section" id="sectionFilter" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+                              <option v-for="sec in sectionsList" :value="sec">{{sec}}</option>
+                            </select>
+                            <p v-if="this.errors.section" class="text-sm text-red-600 text-left mb-2">*{{this.errors.section}}</p>
+                          </div> -->
                           <!-- Description -->
                           <div class="mb-4">
                             <label for="sectionFilter" class="block font-medium mb-1">Description:</label>
@@ -248,13 +249,14 @@
                         id="membershipNumber" type="text" v-model="finance.membershipNumber">
                         <p v-if="this.errors.membershipNumber" class="text-sm text-red-600 text-left mb-2">*{{this.errors.membershipNumber}}</p>
                     </div>
-                    <!-- Section -->
+                    <!-- Section
                     <div class="mb-4">
-                      <label class="block text-gray-700 text-sm font-bold mb-2" for="section">Section:</label>
-                      <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" 
-                        id="section" type="text" v-model="finance.section.name">
-                        <p v-if="this.errors.section" class="text-sm text-red-600 text-left mb-2">*{{this.errors.section}}</p>
-                    </div>
+                        <label class="block text-gray-700 text-sm font-bold mb-2" for="section">Section:</label>
+                            <select v-model="finance.section" id="sectionFilter" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+                              <option v-for="sec in sectionsList" :value="sec">{{sec}}</option>
+                            </select>
+                            <p v-if="this.errors.section" class="text-sm text-red-600 text-left mb-2">*{{this.errors.section}}</p>
+                          </div> -->
                 <!-- Description -->
                 <div class="mb-4">
                             <label for="sectionFilter" class="block font-medium mb-1">Description:</label>
@@ -339,6 +341,7 @@ export default {
       loading:true,
       person: '',
       finance:[],
+      sectionDataset:[],
       payments: {
           description: '',
           amount: '',
@@ -373,6 +376,9 @@ export default {
     },
     sections() {
       return [...new Set(this.items.map((item) => item.section.name))];
+    },
+    sectionsList() {
+      return [...new Set(this.sectionDataset.map((item) => item.name))];
     },
     financeDesc() {
       return [...new Set(this.financeDescription.map((item) => item.description))];
@@ -442,9 +448,6 @@ export default {
             if(!this.payments.description){
                 this.errors.description = "Description is required";
             }         
-            // if(!this.payments.section){
-            //     this.errors.section = "Section is required";
-            // }
             if (Object.keys(this.errors).length === 0) {
         // make API call or submit form data here
         try{
@@ -458,7 +461,6 @@ export default {
           'currency': this.payments.currency,
           'local': local,
           'description': this.payments.description,
-          'section': this.payments.section
         },{
             headers: {'Content-Type': 'application/json'},
             credentials: 'include'
@@ -478,7 +480,7 @@ export default {
       }
     },
     async handleOption(_option) {
-      if(_option = 'yes'){
+      if(_option == 'yes'){
         try{
         await axios.delete('https://chitma.hushsoft.co.zw/api/sectionFinance/deleteSectionFinanceByFinanceID/' + this.FID,{
             headers: {'Content-Type': 'application/json'},
@@ -520,10 +522,7 @@ export default {
             } 
             if(!this.finance.description){
                 this.errors.description = "Description is required";
-            }         
-            if(!this.finance.section){
-                this.errors.section = "Section is required";
-            }       
+            }            
            
             if (Object.keys(this.errors).length === 0) {
         // make API call or submit form data here
@@ -538,7 +537,6 @@ export default {
           'currency': this.finance.currency,
           'local': local,
           'description': this.finance.description,
-          'section': this.finance.section.name
         },{
             headers: {'Content-Type': 'application/json'},
             credentials: 'include'
@@ -570,6 +568,27 @@ export default {
     }).then((res) =>
      {
       this.financeDescription = res.data;
+    }) .catch(error => {
+      console.log(error.code)
+      this.error=error.code;
+      this.errored = true
+
+    }).finally(() => this.loading = false);
+    },
+    async getAllSections(){
+    this.loading = true;
+    
+    const pp = localStorage.getItem('pp');
+      const local = decryptData(pp);
+    const URL = `https://chitma.hushsoft.co.zw/api/sections/getAllSection/${local}`;
+    await axios.get(URL,{
+      headers: {'Content-Type': 'application/json',
+          // Authorization : 'Bearer ' + token,
+          'Access-Control-Allow-Origin': '*'}
+    }).then((res) =>
+     {
+      this.sectionDataset = res.data
+      this.pages = res.data.pageable
     }) .catch(error => {
       console.log(error.code)
       this.error=error.code;
@@ -669,6 +688,7 @@ export default {
     this.fetchSectionFinance(1),
     this.getAllFinanceDescriptions(),
     this.getAdminInfo()
+    this.getAllSections()
   }
 };
 </script>

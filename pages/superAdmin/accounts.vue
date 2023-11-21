@@ -129,11 +129,8 @@
                           </button>
                     </div>
     </div>
-                    <!-- Floating Download Button -->
-                    <!-- <try/> -->
-                    <!-- End of Floating button -->
                   <!--  Add Modal -->
-                  <div v-if="addModal" class="z-10 pt-36 backdrop-brightness-50 top-0 w-screen h-screen absolute inset-0 flex items-center justify-center">
+                  <div v-if="addModal" class="z-10 pt-16 backdrop-brightness-50 top-0 w-screen h-screen absolute inset-0 flex items-center justify-center">
                         <div class="bg-white rounded-lg shadow-md p-5 overflow-y-auto">
                           <!-- Modal Content -->
                           <div class="flex justify-between">
@@ -173,7 +170,14 @@
                               <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" 
                                 id="dateOfBirth" type="date" v-model="users.dateOfBirth" >
                                 <p v-if="this.errors.dateOfBirth" class="text-sm text-red-600 text-left mb-2">*{{this.errors.dateOfBirth}}</p>
-                            </div>  
+                            </div> 
+                               <!-- Phone Number -->
+                               <div class="mb-4">
+                              <label class="block text-gray-700 text-sm font-bold mb-2" for="password">Phone Number:</label>
+                              <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" 
+                                type="phone" v-model="users.phoneNumber" >
+                                <p v-if="this.errors.password" class="text-sm text-red-600 text-left mb-2">*{{this.errors.phoneNumber}}</p>
+                            </div> 
                             <!-- Organisation -->
                             <div class="mb-4">
                               <label class="block text-gray-700 text-sm font-bold mb-2" for="organisation">Organisation</label>
@@ -198,26 +202,26 @@
                               </select>
                               <p v-if="this.errors.membershipStatus" class="text-sm text-red-600 text-left mb-2">*{{this.errors.membershipStatus}}</p>
                             </div>
-                            <!-- Section -->
+                            <!-- Local-->
                             <div class="mb-4">
-                              <label class="block text-gray-700 text-sm font-bold mb-2" for="section">Section:</label>
-                              <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" 
-                                id="section" type="text" v-model="users.section" >
-                                <p v-if="this.errors.section" class="text-sm text-red-600 text-left mb-2">*{{this.errors.section}}</p>
-                            </div> 
-                             
-                             <!-- Role -->
-                             <div class="mb-4">
                               <label class="block text-gray-700 text-sm font-bold mb-2" for="role">Local</label>
                               <select class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" 
-                                id="role" v-model="users.locals" >
+                                id="role" v-model="users.locals" @change="getSectionsList(users.locals)" >
                                 <option value="" disabled>Select Local</option>
-                                <option value="St Andrews">St Andrews</option>
-                                <option value="Sunnyside">Sunnyside</option>
-                                <option value="Ebenezer">Ebenezer</option>
+                                <option v-for="l in localsDataset" :value="l">{{l}}</option>
                               </select>
                               <p v-if="this.errors.locals" class="text-sm text-red-600 text-left mb-2">*{{this.errors.locals}}</p>
-                            </div> 
+                            </div>
+                               <!-- Section -->
+                               <div class="mb-4">
+                              <label class="block text-gray-700 text-sm font-bold mb-2" for="role">Section</label>
+                              <select class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" 
+                                id="role" v-model="users.section" >
+                                <option value="" disabled>Select section</option>
+                                <option v-for="s in sections" :value="s">{{s}}</option>
+                              </select>
+                              <p v-if="this.errors.section" class="text-sm text-red-600 text-left mb-2">*{{this.errors.section}}</p>
+                            </div>                             
                             <!-- Password -->
                             <div class="mb-4">
                               <label class="block text-gray-700 text-sm font-bold mb-2" for="password">Password:</label>
@@ -241,7 +245,7 @@
                         </div>
                       </div>
                       <!-- End of Add modal -->
-                <div v-if="editModal" class="z-10 ml-40 pt-24 backdrop-brightness-50 top-0 w-screen h-screen absolute inset-0 flex items-center justify-center">
+                <div v-if="editModal" class="z-10 pt-16 backdrop-brightness-50 top-0 w-screen h-screen absolute inset-0 flex items-center justify-center">
                   <div class="bg-white rounded-lg shadow-md p-5 overflow-y-auto">
                     <!-- Modal Content -->
                     <div class="flex justify-between">
@@ -306,22 +310,13 @@
                               <p v-if="this.errors.membershipStatus" class="text-sm text-red-600 text-left mb-2">*{{this.errors.membershipStatus}}</p>
                             </div>
                              
-                            <!-- Section -->
+                            <!-- Local-->
                             <div class="mb-4">
-                              <label class="block text-gray-700 text-sm font-bold mb-2" for="section">Section:</label>
-                              <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" 
-                                id="section" type="text" v-model="account.section.name" >
-                                <p v-if="this.errors.section" class="text-sm text-red-600 text-left mb-2">*{{this.errors.section}}</p>
-                            </div> 
-                               <!-- Role -->
-                               <div class="mb-4">
                               <label class="block text-gray-700 text-sm font-bold mb-2" for="role">Local</label>
                               <select class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" 
                                 id="role" v-model="account.locals" >
                                 <option value="" disabled>Select Local</option>
-                                <option value="St Andrews">St Andrews</option>
-                                <option value="Sunnyside">Sunnyside</option>
-                                <option value="Ebenezer">Ebenezer</option>
+                                <option v-for="l in localsDataset" :value="l">{{l}}</option>
                               </select>
                               <p v-if="this.errors.locals" class="text-sm text-red-600 text-left mb-2">*{{this.errors.locals}}</p>
                             </div>
@@ -424,6 +419,8 @@
       }],
       locs:[],
       pages:[],
+      localsData: [],
+      sectionDataset: []
       };
     },
     computed: {
@@ -443,8 +440,11 @@
         return filteredItems;
       },
       sections() {
-        return [...new Set(this.items.map((item) => item.Section))];
+        return [...new Set(this.sectionDataset.map((item) => item.name))];
       },
+      localsDataset() {
+      return [...new Set(this.localsData.map((item) => item.name))];
+    },
     },
     methods:{
       async getUserByMembershipNumber(membershipNumber){
@@ -458,8 +458,6 @@
       }).then((res) =>
        {
         this.account = res.data
-        console.log(this.account);
-        console.log("Information tatora baba.");
         this.editModal = true;
       }) .catch(error => {
         console.log(error.code)
@@ -468,7 +466,43 @@
   
       }).finally(() => this.loading = false);
       },
+      async getLocals(){
+      this.loading = true;
+     
+      const URL = "https://chitma.hushsoft.co.zw/api/local/getAllLocalPreachingPoints";
+      await axios.get(URL,{
+        headers: {'Content-Type': 'application/json',
+            // Authorization : 'Bearer ' + token,
+            'Access-Control-Allow-Origin': '*'}
+      }).then((res) =>
+       {
+        this.localsData = res.data;
+      }) .catch(error => {
+        console.log(error.code)
+        this.error=error.code;
+        this.errored = true
+  
+      }).finally(() => this.loading = false);
+      },
+      async getSectionsList(ll){
+      this.loading = true;
+      const URL = `https://chitma.hushsoft.co.zw/api/sections/getAllSection/${ll}`;
+      await axios.get(URL,{
+        headers: {'Content-Type': 'application/json',
+            // Authorization : 'Bearer ' + token,
+            'Access-Control-Allow-Origin': '*'}
+      }).then((res) =>
+       {
+        this.sectionDataset = res.data;
+      }) .catch(error => {
+        console.log(error.code)
+        this.error=error.code;
+        this.errored = true
+  
+      }).finally(() => this.loading = false);
+      },
       async AddNewUser(){
+        // alert(this.users.locals + this.users.section)
         this.errors = {};
                if(!this.users.firstname){
                    this.errors.firstname = "First name is required";
@@ -484,6 +518,9 @@
                }
                if(!this.users.locals){
                    this.errors.locals = "Local is required";
+               }
+               if(!this.users.phoneNumber){
+                   this.errors.phoneNumber = "Phone Number is required";
                }
                if(!this.users.organisation){
                    this.errors.organisation = "Organisation is required";
@@ -516,6 +553,7 @@
             'organisation': this.users.organisation,  
             'membershipStatus': this.users.membershipStatus,  
             'section': this.users.section, 
+            'phoneNumber': this.users.phoneNumber,
             'password': this.users.password,   
             'local': this.users.locals,
           },{
@@ -523,18 +561,17 @@
               credentials: 'include'
             }).then((response) =>{
             const data = response.data;
+            
             alert("User added successfully.")
             this.closeAddModal()
             reloadNuxtApp()
             this.response = data;
-            console.log(response);
           })
           }catch(err){
           console.log("Error:",err)
           this.errors.failed = "Sorry, an error occured!";
           this.errors.ERR = err;
           }
-          console.log("Form submitted successfully");
         }
       },
       async getAllUsers(pageNumber){
@@ -551,9 +588,6 @@
         this.result = res.data
         this.items = res.data.content
         this.pages = res.data.pageable
-        console.log(this.pages)
-        console.log(this.items)
-        console.log("Fetching Data Completed...");
       }) .catch(error => {
         console.log(error.code)
         this.error=error.code;
@@ -586,25 +620,19 @@
                }
                if(!this.account.membershipStatus){
                    this.errors.membershipStatus = "Membership Status is required";
-               }
-               if(!this.account.section){
-                   this.errors.section = "Section is required";
-               }            
+               }          
               if (Object.keys(this.errors).length === 0) {
           // make API call or submit form data here
           try{
-            const pp = localStorage.getItem('pp');
-            const local = decryptData(pp);
-          await axios.put('https://chitma.hushsoft.co.zw/api/api/v1/auth/updateUserByMembershipNumber/' + membershipNumber,{
+          await axios.put('https://chitma.hushsoft.co.zw/api/api/v1/auth/updateAdminByMembershipNumber/' + membershipNumber,{
             'firstname': this.account.firstname,  
             'lastname': this.account.lastname,  
             'gender': this.account.gender,  
             'dateOfBirth': this.account.dateOfBirth,  
             'role': this.account.role,  
             'organisation': this.account.organisation,  
-            'membershipStatus': this.account.membershipStatus,  
-            'section': this.account.section.name, 
-            'local': this.account.local,
+            'membershipStatus': this.account.membershipStatus,   
+            'local': this.account.locals,
           },{
               headers: {'Content-Type': 'application/json'},
               credentials: 'include'
@@ -614,14 +642,12 @@
             this.closeEditModal()
             reloadNuxtApp()
             this.response = data;
-            console.log(response);
           })
           }catch(err){
           console.log("Error:",err)
           this.errors.failed = "Sorry, an error occured!";
           this.errors.ERR = err;
           }
-          console.log("Form submitted successfully");
         }
       },
      async handleOption (_option) {
@@ -636,14 +662,12 @@
             this.closeDeleteModal()
             reloadNuxtApp()
             this.response = data;
-            console.log(response);
           })
           }catch(err){
           console.log("Error:",err)
           this.errors.failed = "Sorry, an error occured!";
           this.errors.ERR = err;
           }
-          console.log("Form submitted successfully");
       }
       else if(_option == 'no'){
         this.name = ''
@@ -654,7 +678,6 @@
       this.loading = true;
       const mN = localStorage.getItem('mN');
       const mbnD = decryptData(mN);
-      console.log("Munhu uyu",mbnD)
       const URL = `https://chitma.hushsoft.co.zw/api/api/v1/auth/getUserByMembershipNumber/${mbnD}`;
       await axios.get(URL,{
         headers: {'Content-Type': 'application/json',
@@ -696,6 +719,7 @@
     mounted(){
       this.getAllUsers(1)
       this.getAdminInfo()
+      this.getLocals()
     }
   };
   </script>

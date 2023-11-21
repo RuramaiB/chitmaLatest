@@ -222,9 +222,9 @@
                               <select class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" 
                                 id="role" v-model="users.role" >
                                 <option value="" disabled>Select Role</option>
-                                <option value="User">User</option>
+                                <!-- <option value="User">User</option> -->
                                 <option value="Finance">Finance</option>
-                                <option value="Admin">Admin</option>
+                                <!-- <option value="Admin">Admin</option> -->
                               </select>
                               <p v-if="this.errors.role" class="text-sm text-red-600 text-left mb-2">*{{this.errors.role}}</p>
                             </div> 
@@ -340,7 +340,6 @@
                                 <option value="" disabled>Select Role</option>
                                 <option value="User">User</option>
                                 <option value="Finance">Finance</option>
-                                <option value="Admin">Admin</option>
                               </select>
                               <p v-if="this.errors.role" class="text-sm text-red-600 text-left mb-2">*{{this.errors.role}}</p>
                             </div> 
@@ -520,7 +519,8 @@
               if (Object.keys(this.errors).length === 0) {
           // make API call or submit form data here
           try{
-            const local = localStorage.local
+            const pp = localStorage.getItem('pp');
+            const local = decryptData(pp);
           await axios.post('https://chitma.hushsoft.co.zw/api/api/v1/auth/register',{
             'firstname': this.users.firstname,  
             'lastname': this.users.lastname,  

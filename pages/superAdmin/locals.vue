@@ -297,6 +297,7 @@
           await axios.post('https://chitma.hushsoft.co.zw/api/local',{
             'localLocation': this.loc.location,  
             'localName': this.loc.local,
+            'prefix': this.loc.prefix
           },{
               headers: {'Content-Type': 'application/json'},
               credentials: 'include'
@@ -327,11 +328,11 @@
               }      
              
               if (Object.keys(this.errors).length === 0) {
-          // make API call or submit form data here
           try{
           await axios.put('https://chitma.hushsoft.co.zw/api/local/updateLocalByName/' + locNames,{
             location: this.locs.location,  
             name: this.locs.name,
+            prefix: this.locs.prefix
           },{
               headers: {'Content-Type': 'application/json'},
               credentials: 'include'
@@ -341,14 +342,12 @@
             this.closeEditModal()
             reloadNuxtApp()
             this.response = data;
-            console.log(response);
           })
           }catch(err){
           console.log("Error:",err)
           this.errors.failed = "Sorry, an error occured!";
           this.errors.ERR = err;
           }
-          console.log("Form submitted successfully");
         }
       },
      async handleOption (_option) {
@@ -381,7 +380,6 @@
       this.loading = true;
       const mN = localStorage.getItem('mN');
       const mbnD = decryptData(mN);
-      console.log("Munhu uyu",mbnD)
       const URL = `https://chitma.hushsoft.co.zw/api/api/v1/auth/getUserByMembershipNumber/${mbnD}`;
       await axios.get(URL,{
         headers: {'Content-Type': 'application/json',

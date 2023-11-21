@@ -79,10 +79,10 @@
                                 <th scope="col" class="px-6 py-3"></th>
                             </tr>
                         </thead>
-                        <tbody>
+                        <tbody v-if="!loading">
                             <tr v-for="item in filteredItems" :key="item.id" class="bg-white border-b dark:bg-gray-900 dark:border-gray-700">
                               <td class="px-6 py-4">{{ item.id }}</td>
-                              <td class="px-6 py-4">{{ item.local }}</td>
+                              <td class="px-6 py-4">{{ item.locals.name }}</td>
                               <td class="px-6 py-4">{{ item.paymentMethod }}</td>
                               <td class="px-6 py-4">{{ item.currency }}</td>
                               <td class="px-6 py-4">{{ item.paymentId }}</td>
@@ -108,7 +108,7 @@
                   </div> -->
                 </div>
                   <!--  Add Modal -->
-                  <div v-if="addModal" class="z-10 pt-36 backdrop-brightness-50 top-0 w-screen h-screen absolute inset-0 flex items-center justify-center">
+                  <div v-if="addModal" class="z-10 pt-16 backdrop-brightness-50 top-0 w-screen h-screen absolute inset-0 flex items-center justify-center">
                         <div class="bg-white rounded-lg shadow-md p-5 overflow-y-auto">
                           <!-- Modal Content -->
                           <div class="flex justify-between">
@@ -117,13 +117,16 @@
                           </div>
                           <p v-if="loading">Processing the payment request</p>
                           <form  v-else @submit.prevent="addPaymentDetail()" class=" grid grid-cols-2 gap-12 bg-white shadow-md rounded px-8 py-6 mb-4">     
-                            <!-- Local Name -->
+                            <!-- Local-->
                             <div class="mb-4">
-                              <label class="block text-gray-700 text-sm font-bold mb-2" for="local">Local Name:</label>
-                              <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" 
-                                id="local" type="text" v-model="payDetail.local" >
-                                <p v-if="this.errors.local" class="text-sm text-red-600 text-left mb-2">*{{this.errors.local}}</p>
-                            </div>  
+                              <label class="block text-gray-700 text-sm font-bold mb-2" for="role">Local</label>
+                              <select class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" 
+                                id="role" v-model="payDetail.locals">
+                                <option value="" disabled>Select Local</option>
+                                <option v-for="l in localsDataset" :value="l">{{l}}</option>
+                              </select>
+                              <p v-if="this.errors.locals" class="text-sm text-red-600 text-left mb-2">*{{this.errors.locals}}</p>
+                            </div>
                             <!-- Payment method -->
                             <div class="mb-4">
                               <label class="block text-gray-700 text-sm font-bold mb-2" for="location">Payment method:</label>
@@ -169,13 +172,16 @@
                       <button class="bg-red-500 text-white text-xl font-xl px-3 py-1 mt-4 rounded-md" @click="closeEditModal">X</button>
                     </div>
                     <form @submit.prevent="updatePaymentDetail(paymentD.id)" class=" grid grid-cols-2 gap-12 bg-white shadow-md rounded px-8 py-6 mb-4">     
-                        <!-- Local Name -->
-                        <div class="mb-4">
-                              <label class="block text-gray-700 text-sm font-bold mb-2" for="local">Local Name:</label>
-                              <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" 
-                                id="local" type="text" v-model="paymentD.local" >
-                                <p v-if="this.errors.local" class="text-sm text-red-600 text-left mb-2">*{{this.errors.local}}</p>
-                            </div>  
+                         <!-- Local-->
+                         <div class="mb-4">
+                              <label class="block text-gray-700 text-sm font-bold mb-2" for="role">Local</label>
+                              <select class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" 
+                                id="role" v-model="paymentD.locals">
+                                <option value="" disabled>Select Local</option>
+                                <option v-for="l in localsDataset" :value="l">{{l}}</option>
+                              </select>
+                              <p v-if="this.errors.locals" class="text-sm text-red-600 text-left mb-2">*{{this.errors.locals}}</p>
+                            </div>
                             <!-- Payment method -->
                             <div class="mb-4">
                               <label class="block text-gray-700 text-sm font-bold mb-2" for="location">Payment method:</label>
@@ -245,12 +251,8 @@
         isOpen: false,
         person: '',
         name: '',
-        item: [{
-          id: '',
-          location: '',
-          circuit: [],
-          local: '',
-        }],
+        item: [],
+        localsData: [],
         errors: {},
         payDetail: {},
         paymentD:{},
@@ -276,6 +278,9 @@
       sections() {
         return [...new Set(this.items.map((item) => item.Section))];
       },
+      localsDataset() {
+      return [...new Set(this.localsData.map((item) => item.name))];
+    },
     },
     methods:{
       async getFinancialDetailByID(id){
@@ -289,8 +294,25 @@
       }).then((res) =>
        {
         this.paymentD = res.data
-        // console.log(this.paymentD);
         this.editModal = true;
+      }) .catch(error => {
+        console.log(error.code)
+        this.error=error.code;
+        this.errored = true
+  
+      }).finally(() => this.loading = false);
+      },
+      async getLocals(){
+      this.loading = true;
+     
+      const URL = "https://chitma.hushsoft.co.zw/api/local/getAllLocalPreachingPoints";
+      await axios.get(URL,{
+        headers: {'Content-Type': 'application/json',
+            // Authorization : 'Bearer ' + token,
+            'Access-Control-Allow-Origin': '*'}
+      }).then((res) =>
+       {
+        this.localsData = res.data;
       }) .catch(error => {
         console.log(error.code)
         this.error=error.code;
@@ -319,8 +341,8 @@
       },
       async addPaymentDetail(){
               this.errors = {};
-              if(!this.payDetail.local){
-                  this.errors.local = "Local is required";
+              if(!this.payDetail.locals){
+                  this.errors.locals = "Local is required";
               }   
               if(!this.payDetail.paymentMethod){
                   this.errors.paymentMethod = "Payment method is required";
@@ -342,7 +364,7 @@
             'paymentId': this.payDetail.paymentId,  
             'paymentKey': this.payDetail.paymentKey,  
             'currency': this.payDetail.currency,  
-            'local': this.payDetail.local,
+            'local': this.payDetail.locals,
           },{
               headers: {'Content-Type': 'application/json'},
               credentials: 'include'
@@ -363,8 +385,8 @@
       },
       async updatePaymentDetail(id){
               this.errors = {};
-              if(!this.paymentD.local){
-                  this.errors.local = "Local is required";
+              if(!this.paymentD.locals){
+                  this.errors.locals = "Local is required";
               }   
               if(!this.paymentD.paymentMethod){
                   this.errors.paymentMethod = "Payment method is required";
@@ -387,7 +409,7 @@
             'paymentId': this.paymentD.paymentId,  
             'paymentKey': this.paymentD.paymentKey,  
             'currency': this.paymentD.currency,  
-            'local': this.paymentD.local,
+            'local': this.paymentD.locals,
           },{
               headers: {'Content-Type': 'application/json'},
               credentials: 'include'
@@ -479,6 +501,7 @@
     mounted(){
       this.getAllPaymentDetails(0)
       this.getAdminInfo()
+      this.getLocals()
       
     }
   };
