@@ -190,7 +190,7 @@
                             <td class="px-6 py-4">{{ item.phoneNumber }}</td>
                             <td class="px-6 py-4">{{ item.paymentMethod }}</td>
                             <td class="px-6 py-4">{{ item.currency }}</td>
-                            <td class="px-6 py-4">{{ item.description }}</td>
+                            <td class="px-6 py-4">{{ item.financeDescription.description }}</td>
                             <td class="px-6 py-4">{{ item.amount }}</td>
                             <td class="px-3 py-4">
                               <a href="#" class="font-medium text-green-500 dark:text-blue-500 hover:underline">

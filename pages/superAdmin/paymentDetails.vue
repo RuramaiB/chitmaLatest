@@ -62,6 +62,9 @@
                                   Local
                                 </th>
                                 <th scope="col" class="px-6 py-3">
+                                  Email
+                                </th>
+                                <th scope="col" class="px-6 py-3">
                                   Payment Method
                                 </th>
                                 <th scope="col" class="px-6 py-3">
@@ -83,6 +86,7 @@
                             <tr v-for="item in filteredItems" :key="item.id" class="bg-white border-b dark:bg-gray-900 dark:border-gray-700">
                               <td class="px-6 py-4">{{ item.id }}</td>
                               <td class="px-6 py-4">{{ item.locals.name }}</td>
+                              <td class="px-6 py-4">{{ item.email }}</td>
                               <td class="px-6 py-4">{{ item.paymentMethod }}</td>
                               <td class="px-6 py-4">{{ item.currency }}</td>
                               <td class="px-6 py-4">{{ item.paymentId }}</td>
@@ -127,6 +131,13 @@
                               </select>
                               <p v-if="this.errors.locals" class="text-sm text-red-600 text-left mb-2">*{{this.errors.locals}}</p>
                             </div>
+                            <!-- Email -->
+                            <div class="mb-4">
+                              <label class="block text-gray-700 text-sm font-bold mb-2" for="location">Email:</label>
+                              <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" 
+                                id="location" type="text" v-model="payDetail.email" >
+                                <p v-if="this.errors.email" class="text-sm text-red-600 text-left mb-2">*{{this.errors.email}}</p>
+                            </div> 
                             <!-- Payment method -->
                             <div class="mb-4">
                               <label class="block text-gray-700 text-sm font-bold mb-2" for="location">Payment method:</label>
@@ -182,6 +193,13 @@
                               </select>
                               <p v-if="this.errors.locals" class="text-sm text-red-600 text-left mb-2">*{{this.errors.locals}}</p>
                             </div>
+                               <!-- Email -->
+                               <div class="mb-4">
+                              <label class="block text-gray-700 text-sm font-bold mb-2" for="location">Email:</label>
+                              <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" 
+                                id="location" type="text" v-model="paymentD.email" >
+                                <p v-if="this.errors.email" class="text-sm text-red-600 text-left mb-2">*{{this.errors.email}}</p>
+                            </div> 
                             <!-- Payment method -->
                             <div class="mb-4">
                               <label class="block text-gray-700 text-sm font-bold mb-2" for="location">Payment method:</label>
@@ -350,6 +368,9 @@
               if(!this.payDetail.currency){
                   this.errors.currency = "Currency is required";
               } 
+              if(!this.payDetail.email){
+                  this.errors.email = "Email is required";
+              } 
               if(!this.payDetail.paymentId){
                   this.errors.paymentId = "Payment ID is required";
               } 
@@ -365,6 +386,7 @@
             'paymentKey': this.payDetail.paymentKey,  
             'currency': this.payDetail.currency,  
             'local': this.payDetail.locals,
+            'email': this.payDetail.email
           },{
               headers: {'Content-Type': 'application/json'},
               credentials: 'include'
@@ -394,6 +416,9 @@
               if(!this.paymentD.currency){
                   this.errors.currency = "Currency is required";
               } 
+              if(!this.paymentD.email){
+                  this.errors.email = "Email is required";
+              } 
               if(!this.paymentD.paymentId){
                   this.errors.paymentId = "Payment ID is required";
               } 
@@ -410,6 +435,7 @@
             'paymentKey': this.paymentD.paymentKey,  
             'currency': this.paymentD.currency,  
             'local': this.paymentD.locals,
+            'email': this.paymentD.email
           },{
               headers: {'Content-Type': 'application/json'},
               credentials: 'include'
